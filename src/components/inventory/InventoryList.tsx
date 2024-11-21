@@ -10,6 +10,11 @@ interface InventoryListProps {
 }
 
 const InventoryList = ({ items, onEditItem, onDeleteItem }: InventoryListProps) => {
+  const handleItemNameClick = (itemName: string) => {
+    const searchQuery = encodeURIComponent(itemName);
+    window.open(`https://www.google.com/search?q=${searchQuery}`, '_blank');
+  };
+
   return (
     <div className="space-y-4">
       {items.map((item) => (
@@ -17,7 +22,13 @@ const InventoryList = ({ items, onEditItem, onDeleteItem }: InventoryListProps) 
           <CardContent className="p-4">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="font-semibold">{item.name}</h3>
+                <h3 
+                  className="font-semibold hover:text-blue-500 cursor-pointer underline"
+                  onClick={() => handleItemNameClick(item.name)}
+                  title="Click to search for this item"
+                >
+                  {item.name}
+                </h3>
                 <p>Quantity: {item.quantity}</p>
                 <p>Price: ${item.price}</p>
                 <p>Category: {item.category}</p>

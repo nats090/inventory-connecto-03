@@ -44,6 +44,7 @@ const InventoryList = ({ items, onEditItem, onDeleteItem }: InventoryListProps) 
                   variant="secondary"
                   size="sm"
                   onClick={() => handleItemNameClick(item.name)}
+                  className="hover:bg-secondary/90 transition-colors"
                 >
                   Details
                 </Button>

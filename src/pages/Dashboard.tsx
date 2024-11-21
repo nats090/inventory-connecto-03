@@ -194,6 +194,7 @@ const Dashboard = () => {
       quantityReduced: 1,
       earned: earned,
       timestamp: new Date().toISOString(),
+      category: item.category,
     };
 
     setSales(prev => [...prev, newSale]);

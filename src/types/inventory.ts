@@ -18,6 +18,7 @@ export interface Sale {
   quantityReduced: number;
   earned: number;
   timestamp: string;
+  category: string;
 }
 
 export interface Activity {

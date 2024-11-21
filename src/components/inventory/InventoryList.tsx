@@ -22,11 +22,7 @@ const InventoryList = ({ items, onEditItem, onDeleteItem }: InventoryListProps) 
           <CardContent className="p-4">
             <div className="flex justify-between items-start">
               <div>
-                <h3 
-                  className="font-semibold hover:text-blue-500 cursor-pointer"
-                  onClick={() => handleItemNameClick(item.name)}
-                  title="Click to search for this item"
-                >
+                <h3 className="font-semibold">
                   {item.name}
                 </h3>
                 <p>Quantity: {item.quantity}</p>

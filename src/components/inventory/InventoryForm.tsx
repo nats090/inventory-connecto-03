@@ -9,10 +9,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { InventoryItem } from "@/types/inventory";
+import { Dispatch, SetStateAction } from "react";
 
 interface InventoryFormProps {
   newItem: Partial<InventoryItem>;
-  setNewItem: (item: Partial<InventoryItem>) => void;
+  setNewItem: Dispatch<SetStateAction<Partial<InventoryItem>>>;
   editingItem: InventoryItem | null;
   setEditingItem: (item: InventoryItem | null) => void;
   onSubmit: (e: React.FormEvent) => void;
@@ -40,7 +41,7 @@ const InventoryForm = ({
             onChange={(e) =>
               editingItem
                 ? setEditingItem({ ...editingItem, name: e.target.value })
-                : setNewItem({ ...newItem, name: e.target.value })
+                : setNewItem((prev) => ({ ...prev, name: e.target.value }))
             }
             required
           />
@@ -51,7 +52,7 @@ const InventoryForm = ({
             onChange={(e) =>
               editingItem
                 ? setEditingItem({ ...editingItem, quantity: Number(e.target.value) })
-                : setNewItem({ ...newItem, quantity: Number(e.target.value) })
+                : setNewItem((prev) => ({ ...prev, quantity: Number(e.target.value) }))
             }
             required
           />
@@ -62,7 +63,7 @@ const InventoryForm = ({
             onChange={(e) =>
               editingItem
                 ? setEditingItem({ ...editingItem, price: Number(e.target.value) })
-                : setNewItem({ ...newItem, price: Number(e.target.value) })
+                : setNewItem((prev) => ({ ...prev, price: Number(e.target.value) }))
             }
             required
           />
@@ -71,7 +72,7 @@ const InventoryForm = ({
             onValueChange={(value) =>
               editingItem
                 ? setEditingItem({ ...editingItem, category: value })
-                : setNewItem({ ...newItem, category: value })
+                : setNewItem((prev) => ({ ...prev, category: value }))
             }
             required
           >

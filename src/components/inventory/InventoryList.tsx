@@ -23,7 +23,7 @@ const InventoryList = ({ items, onEditItem, onDeleteItem }: InventoryListProps) 
             <div className="flex justify-between items-start">
               <div>
                 <h3 
-                  className="font-semibold hover:text-blue-500 cursor-pointer underline"
+                  className="font-semibold hover:text-blue-500 cursor-pointer"
                   onClick={() => handleItemNameClick(item.name)}
                   title="Click to search for this item"
                 >
@@ -43,6 +43,13 @@ const InventoryList = ({ items, onEditItem, onDeleteItem }: InventoryListProps) 
                   onClick={() => onEditItem(item)}
                 >
                   Edit
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => handleItemNameClick(item.name)}
+                >
+                  Details
                 </Button>
                 <Button
                   variant="destructive"

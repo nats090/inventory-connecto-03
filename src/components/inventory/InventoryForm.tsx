@@ -48,7 +48,7 @@ const InventoryForm = ({
           <Input
             type="number"
             placeholder="Quantity"
-            value={editingItem ? editingItem.quantity : newItem.quantity}
+            value={editingItem ? editingItem.quantity : newItem.quantity || ""}
             onChange={(e) =>
               editingItem
                 ? setEditingItem({ ...editingItem, quantity: Number(e.target.value) })
@@ -59,7 +59,7 @@ const InventoryForm = ({
           <Input
             type="number"
             placeholder="Price"
-            value={editingItem ? editingItem.price : newItem.price}
+            value={editingItem ? editingItem.price : newItem.price || ""}
             onChange={(e) =>
               editingItem
                 ? setEditingItem({ ...editingItem, price: Number(e.target.value) })

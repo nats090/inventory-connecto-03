@@ -3,14 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
-import type { InventoryItem } from "@/types/inventory";
+import type { InventoryItem, Sale, Activity } from "@/types/inventory";
 import InventoryForm from "@/components/inventory/InventoryForm";
 import InventoryTabs from "@/components/inventory/InventoryTabs";
+import EarningsDashboard from "@/components/inventory/EarningsDashboard";
+import ActivityLogs from "@/components/inventory/ActivityLogs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [items, setItems] = useState<InventoryItem[]>([]);
+  const [sales, setSales] = useState<Sale[]>([]);
+  const [activities, setActivities] = useState<Activity[]>([]);
   const [newItem, setNewItem] = useState({
     name: "",
     quantity: 0,
@@ -90,6 +95,7 @@ const Dashboard = () => {
       category: "",
     });
     
+    addActivity(`Added new item: ${newItem.name}`);
     fetchItems();
   };
 
@@ -123,11 +129,13 @@ const Dashboard = () => {
       description: "Item updated successfully",
     });
 
+    addActivity(`Updated item: ${editingItem.name}`);
     setEditingItem(null);
     fetchItems();
   };
 
   const handleDeleteItem = async (id: string) => {
+    const itemToDelete = items.find(item => item.id === id);
     const { error } = await supabase
       .from("inventory_items")
       .delete()
@@ -148,7 +156,58 @@ const Dashboard = () => {
       description: "Item deleted successfully",
     });
 
+    if (itemToDelete) {
+      addActivity(`Deleted item: ${itemToDelete.name}`);
+    }
     fetchItems();
+  };
+
+  const handleReduceQuantity = async (item: InventoryItem) => {
+    if (item.quantity <= 0) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Cannot reduce quantity below 0",
+      });
+      return;
+    }
+
+    const newQuantity = item.quantity - 1;
+    const earned = item.price;
+
+    const { error } = await supabase
+      .from("inventory_items")
+      .update({ quantity: newQuantity })
+      .eq("id", item.id);
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to reduce quantity",
+      });
+      return;
+    }
+
+    const newSale: Sale = {
+      itemName: item.name,
+      quantityReduced: 1,
+      earned: earned,
+      timestamp: new Date().toISOString(),
+    };
+
+    setSales(prev => [...prev, newSale]);
+    addActivity(`Reduced quantity of ${item.name} by 1, earned $${earned}`);
+    fetchItems();
+  };
+
+  const addActivity = (details: string) => {
+    const newActivity: Activity = {
+      action: "Inventory Update",
+      details,
+      timestamp: new Date().toISOString(),
+    };
+    setActivities(prev => [newActivity, ...prev]);
   };
 
   const handleLogout = async () => {
@@ -159,30 +218,50 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="container mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Food Stall Inventory</h1>
-          <Button variant="outline" onClick={handleLogout}>
-            Logout
-          </Button>
-        </div>
-
-        <div className="grid gap-8 md:grid-cols-2">
-          <InventoryForm
-            newItem={newItem}
-            setNewItem={setNewItem}
-            editingItem={editingItem}
-            setEditingItem={setEditingItem}
-            onSubmit={editingItem ? handleUpdateItem : handleAddItem}
-          />
-
-          <div>
-            <InventoryTabs
-              items={items}
-              onEditItem={setEditingItem}
-              onDeleteItem={handleDeleteItem}
-            />
+        <Tabs defaultValue="inventory" className="w-full">
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl font-bold">Food Stall Inventory</h1>
+            <div className="flex gap-4">
+              <TabsList>
+                <TabsTrigger value="inventory">Inventory</TabsTrigger>
+                <TabsTrigger value="earnings">Earnings</TabsTrigger>
+                <TabsTrigger value="activities">Activities</TabsTrigger>
+              </TabsList>
+              <Button variant="outline" onClick={handleLogout}>
+                Logout
+              </Button>
+            </div>
           </div>
-        </div>
+
+          <TabsContent value="inventory">
+            <div className="grid gap-8 md:grid-cols-2">
+              <InventoryForm
+                newItem={newItem}
+                setNewItem={setNewItem}
+                editingItem={editingItem}
+                setEditingItem={setEditingItem}
+                onSubmit={editingItem ? handleUpdateItem : handleAddItem}
+              />
+
+              <div>
+                <InventoryTabs
+                  items={items}
+                  onEditItem={setEditingItem}
+                  onDeleteItem={handleDeleteItem}
+                  onReduceQuantity={handleReduceQuantity}
+                />
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="earnings">
+            <EarningsDashboard sales={sales} />
+          </TabsContent>
+
+          <TabsContent value="activities">
+            <ActivityLogs activities={activities} />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

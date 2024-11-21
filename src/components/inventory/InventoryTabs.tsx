@@ -6,11 +6,12 @@ interface InventoryTabsProps {
   items: InventoryItem[];
   onEditItem: (item: InventoryItem) => void;
   onDeleteItem: (id: string) => void;
+  onReduceQuantity: (item: InventoryItem) => void;
 }
 
 const CATEGORIES = ["chicken", "pork", "beef", "fish"] as const;
 
-const InventoryTabs = ({ items, onEditItem, onDeleteItem }: InventoryTabsProps) => {
+const InventoryTabs = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: InventoryTabsProps) => {
   return (
     <Tabs defaultValue="chicken" className="w-full">
       <TabsList className="grid grid-cols-4 w-full">
@@ -27,6 +28,7 @@ const InventoryTabs = ({ items, onEditItem, onDeleteItem }: InventoryTabsProps) 
             items={items.filter((item) => item.category === category)}
             onEditItem={onEditItem}
             onDeleteItem={onDeleteItem}
+            onReduceQuantity={onReduceQuantity}
           />
         </TabsContent>
       ))}

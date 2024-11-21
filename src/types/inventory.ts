@@ -12,3 +12,16 @@ export interface User {
   id: string;
   email: string;
 }
+
+export interface Sale {
+  itemName: string;
+  quantityReduced: number;
+  earned: number;
+  timestamp: string;
+}
+
+export interface Activity {
+  action: string;
+  details: string;
+  timestamp: string;
+}

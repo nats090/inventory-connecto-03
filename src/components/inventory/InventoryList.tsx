@@ -7,9 +7,10 @@ interface InventoryListProps {
   items: InventoryItem[];
   onEditItem: (item: InventoryItem) => void;
   onDeleteItem: (id: string) => void;
+  onReduceQuantity: (item: InventoryItem) => void;
 }
 
-const InventoryList = ({ items, onEditItem, onDeleteItem }: InventoryListProps) => {
+const InventoryList = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: InventoryListProps) => {
   const handleItemNameClick = (itemName: string) => {
     const searchQuery = encodeURIComponent(itemName);
     window.open(`https://www.google.com/search?q=${searchQuery}`, '_blank');
@@ -54,6 +55,13 @@ const InventoryList = ({ items, onEditItem, onDeleteItem }: InventoryListProps) 
                   onClick={() => onDeleteItem(item.id)}
                 >
                   Delete
+                </Button>
+                <Button
+                  className="bg-blue-700 hover:bg-blue-800"
+                  size="sm"
+                  onClick={() => onReduceQuantity(item)}
+                >
+                  Reduce
                 </Button>
               </div>
             </div>

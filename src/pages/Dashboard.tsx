@@ -17,6 +17,7 @@ const Dashboard = () => {
     price: 0,
     category: "",
   });
+  const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
 
   useEffect(() => {
     checkUser();
@@ -92,6 +93,64 @@ const Dashboard = () => {
     fetchItems();
   };
 
+  const handleUpdateItem = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingItem) return;
+
+    const { data, error } = await supabase
+      .from("inventory_items")
+      .update({
+        name: editingItem.name,
+        quantity: editingItem.quantity,
+        price: editingItem.price,
+        category: editingItem.category,
+      })
+      .eq("id", editingItem.id)
+      .select();
+
+    if (error) {
+      console.error("Error updating item:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update item",
+      });
+      return;
+    }
+
+    toast({
+      title: "Success",
+      description: "Item updated successfully",
+    });
+
+    setEditingItem(null);
+    fetchItems();
+  };
+
+  const handleDeleteItem = async (id: string) => {
+    const { error } = await supabase
+      .from("inventory_items")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error deleting item:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete item",
+      });
+      return;
+    }
+
+    toast({
+      title: "Success",
+      description: "Item deleted successfully",
+    });
+
+    fetchItems();
+  };
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate("/login");
@@ -110,47 +169,68 @@ const Dashboard = () => {
         <div className="grid gap-8 md:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle>Add New Item</CardTitle>
+              <CardTitle>
+                {editingItem ? "Edit Item" : "Add New Item"}
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleAddItem} className="space-y-4">
+              <form onSubmit={editingItem ? handleUpdateItem : handleAddItem} className="space-y-4">
                 <Input
                   placeholder="Item Name"
-                  value={newItem.name}
+                  value={editingItem ? editingItem.name : newItem.name}
                   onChange={(e) =>
-                    setNewItem({ ...newItem, name: e.target.value })
+                    editingItem
+                      ? setEditingItem({ ...editingItem, name: e.target.value })
+                      : setNewItem({ ...newItem, name: e.target.value })
                   }
                   required
                 />
                 <Input
                   type="number"
                   placeholder="Quantity"
-                  value={newItem.quantity}
+                  value={editingItem ? editingItem.quantity : newItem.quantity}
                   onChange={(e) =>
-                    setNewItem({ ...newItem, quantity: Number(e.target.value) })
+                    editingItem
+                      ? setEditingItem({ ...editingItem, quantity: Number(e.target.value) })
+                      : setNewItem({ ...newItem, quantity: Number(e.target.value) })
                   }
                   required
                 />
                 <Input
                   type="number"
                   placeholder="Price"
-                  value={newItem.price}
+                  value={editingItem ? editingItem.price : newItem.price}
                   onChange={(e) =>
-                    setNewItem({ ...newItem, price: Number(e.target.value) })
+                    editingItem
+                      ? setEditingItem({ ...editingItem, price: Number(e.target.value) })
+                      : setNewItem({ ...newItem, price: Number(e.target.value) })
                   }
                   required
                 />
                 <Input
                   placeholder="Category"
-                  value={newItem.category}
+                  value={editingItem ? editingItem.category : newItem.category}
                   onChange={(e) =>
-                    setNewItem({ ...newItem, category: e.target.value })
+                    editingItem
+                      ? setEditingItem({ ...editingItem, category: e.target.value })
+                      : setNewItem({ ...newItem, category: e.target.value })
                   }
                   required
                 />
-                <Button type="submit" className="w-full">
-                  Add Item
-                </Button>
+                <div className="flex gap-2">
+                  <Button type="submit" className="flex-1">
+                    {editingItem ? "Update Item" : "Add Item"}
+                  </Button>
+                  {editingItem && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setEditingItem(null)}
+                    >
+                      Cancel
+                    </Button>
+                  )}
+                </div>
               </form>
             </CardContent>
           </Card>
@@ -164,10 +244,30 @@ const Dashboard = () => {
                 {items.map((item) => (
                   <Card key={item.id}>
                     <CardContent className="p-4">
-                      <h3 className="font-semibold">{item.name}</h3>
-                      <p>Quantity: {item.quantity}</p>
-                      <p>Price: ${item.price}</p>
-                      <p>Category: {item.category}</p>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-semibold">{item.name}</h3>
+                          <p>Quantity: {item.quantity}</p>
+                          <p>Price: ${item.price}</p>
+                          <p>Category: {item.category}</p>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setEditingItem(item)}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleDeleteItem(item.id)}
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </div>
                     </CardContent>
                   </Card>
                 ))}

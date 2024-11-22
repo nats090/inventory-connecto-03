@@ -14,14 +14,18 @@ export interface User {
 }
 
 export interface Sale {
-  itemName: string;
-  quantityReduced: number;
+  id: string;
+  user_id: string;
+  item_name: string;
+  quantity_reduced: number;
   earned: number;
-  timestamp: string;
   category: string;
+  timestamp: string;
 }
 
 export interface Activity {
+  id: string;
+  user_id: string;
   action: string;
   details: string;
   timestamp: string;

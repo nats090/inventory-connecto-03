@@ -3,19 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
-import type { InventoryItem, Sale, Activity } from "@/types/inventory";
+import type { InventoryItem, Sale } from "@/types/inventory";
 import InventoryForm from "@/components/inventory/InventoryForm";
 import InventoryTabs from "@/components/inventory/InventoryTabs";
 import EarningsDashboard from "@/components/inventory/EarningsDashboard";
 import ActivityLogs from "@/components/inventory/ActivityLogs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useActivities } from "@/hooks/useActivities";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [sales, setSales] = useState<Sale[]>([]);
-  const [activities, setActivities] = useState<Activity[]>([]);
+  const [userId, setUserId] = useState<string>();
+  const { activities, addActivity } = useActivities(userId);
   const [newItem, setNewItem] = useState({
     name: "",
     quantity: 0,
@@ -34,6 +36,8 @@ const Dashboard = () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       navigate("/login");
+    } else {
+      setUserId(session.user.id);
     }
   };
 
@@ -243,16 +247,27 @@ const Dashboard = () => {
   };
 
   const handleResetSales = async (category: string) => {
-    setSales(prev => prev.filter(sale => sale.category !== category));
-  };
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
 
-  const addActivity = (details: string) => {
-    const newActivity: Activity = {
-      action: "Inventory Update",
-      details,
-      timestamp: new Date().toISOString(),
-    };
-    setActivities(prev => [newActivity, ...prev]);
+    const { error } = await supabase
+      .from("sales")
+      .delete()
+      .eq("user_id", session.user.id)
+      .eq("category", category);
+
+    if (error) {
+      console.error("Error resetting sales:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to reset sales",
+      });
+      return;
+    }
+
+    addActivity(`Reset sales for category: ${category}`);
+    fetchSales();
   };
 
   const handleLogout = async () => {

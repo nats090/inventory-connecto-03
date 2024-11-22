@@ -1,18 +1,57 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Activity } from "@/types/inventory";
 import { formatDate } from "@/lib/utils";
+import { Download } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ActivityLogsProps {
   activities: Activity[];
 }
 
 const ActivityLogs = ({ activities }: ActivityLogsProps) => {
-  console.log("Rendering ActivityLogs with activities:", activities);
+  const { toast } = useToast();
+  
+  const handleDownloadLogs = () => {
+    const content = `Activity Logs Report\n` +
+      `Generated on: ${new Date().toLocaleString()}\n\n` +
+      activities.map(activity => 
+        `Action: ${activity.action}\n` +
+        `Details: ${activity.details}\n` +
+        `Time: ${formatDate(activity.timestamp)}\n` +
+        `----------------------------------------`
+      ).join('\n\n');
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `activity_logs_${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "Success",
+      description: "Activity logs have been downloaded",
+    });
+  };
   
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle>Activity Logs</CardTitle>
+        {activities.length > 0 && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleDownloadLogs}
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Download Logs
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="space-y-2">

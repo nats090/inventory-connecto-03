@@ -1,20 +1,54 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { Sale } from "@/types/inventory";
+import { supabase } from "@/lib/supabase";
+import { useToast } from "@/components/ui/use-toast";
 
 interface EarningsDashboardProps {
   sales: Sale[];
+  onSalesReset: (category: string) => void;
 }
 
 const CATEGORIES = ["chicken", "pork", "beef", "fish"] as const;
 
-const EarningsDashboard = ({ sales }: EarningsDashboardProps) => {
+const EarningsDashboard = ({ sales, onSalesReset }: EarningsDashboardProps) => {
+  const { toast } = useToast();
+
   const getSalesByCategory = (category: string) => {
     return sales.filter((sale) => sale.category === category);
   };
 
   const calculateTotalEarnings = (categorySales: Sale[]) => {
     return categorySales.reduce((total, sale) => total + sale.earned, 0);
+  };
+
+  const handleResetCategory = async (category: string) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { error } = await supabase
+        .from('sales')
+        .delete()
+        .eq('user_id', session.user.id)
+        .eq('category', category);
+
+      if (error) throw error;
+
+      onSalesReset(category);
+      toast({
+        title: "Success",
+        description: `Reset sales history for ${category}`,
+      });
+    } catch (error) {
+      console.error('Error resetting sales:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to reset sales history",
+      });
+    }
   };
 
   return (
@@ -50,8 +84,15 @@ const EarningsDashboard = ({ sales }: EarningsDashboardProps) => {
                     </div>
                   ))}
                   {categorySales.length > 0 && (
-                    <div className="pt-4 border-t">
+                    <div className="pt-4 border-t flex justify-between items-center">
                       <p className="font-semibold">Total Earnings: ${totalEarnings}</p>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleResetCategory(category)}
+                      >
+                        Reset {category} sales
+                      </Button>
                     </div>
                   )}
                   {categorySales.length === 0 && (

@@ -27,6 +27,7 @@ const Dashboard = () => {
   useEffect(() => {
     checkUser();
     fetchItems();
+    fetchSales();
   }, []);
 
   const checkUser = async () => {
@@ -56,6 +57,28 @@ const Dashboard = () => {
     }
 
     setItems(data || []);
+  };
+
+  const fetchSales = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+
+    const { data, error } = await supabase
+      .from("sales")
+      .select("*")
+      .eq("user_id", session.user.id);
+
+    if (error) {
+      console.error("Error fetching sales:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to fetch sales history",
+      });
+      return;
+    }
+
+    setSales(data || []);
   };
 
   const handleAddItem = async (e: React.FormEvent) => {
@@ -172,15 +195,18 @@ const Dashboard = () => {
       return;
     }
 
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+
     const newQuantity = item.quantity - 1;
     const earned = item.price;
 
-    const { error } = await supabase
+    const { error: updateError } = await supabase
       .from("inventory_items")
       .update({ quantity: newQuantity })
       .eq("id", item.id);
 
-    if (error) {
+    if (updateError) {
       toast({
         variant: "destructive",
         title: "Error",
@@ -189,17 +215,35 @@ const Dashboard = () => {
       return;
     }
 
-    const newSale: Sale = {
-      itemName: item.name,
-      quantityReduced: 1,
+    const newSale = {
+      user_id: session.user.id,
+      item_name: item.name,
+      quantity_reduced: 1,
       earned: earned,
-      timestamp: new Date().toISOString(),
       category: item.category,
     };
 
-    setSales(prev => [...prev, newSale]);
+    const { error: saleError } = await supabase
+      .from("sales")
+      .insert([newSale]);
+
+    if (saleError) {
+      console.error("Error recording sale:", saleError);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to record sale",
+      });
+      return;
+    }
+
+    fetchSales();
     addActivity(`Reduced quantity of ${item.name} by 1, earned $${earned}`);
     fetchItems();
+  };
+
+  const handleResetSales = async (category: string) => {
+    setSales(prev => prev.filter(sale => sale.category !== category));
   };
 
   const addActivity = (details: string) => {
@@ -256,7 +300,7 @@ const Dashboard = () => {
           </TabsContent>
 
           <TabsContent value="earnings">
-            <EarningsDashboard sales={sales} />
+            <EarningsDashboard sales={sales} onSalesReset={handleResetSales} />
           </TabsContent>
 
           <TabsContent value="activities">

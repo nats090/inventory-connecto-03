@@ -75,8 +75,8 @@ const EarningsDashboard = ({ sales, onSalesReset }: EarningsDashboardProps) => {
                 <div className="space-y-4">
                   {categorySales.map((sale, index) => (
                     <div key={index} className="border-b pb-4 last:border-0">
-                      <h3 className="font-semibold">{sale.itemName}</h3>
-                      <p>Quantity reduced: {sale.quantityReduced}</p>
+                      <h3 className="font-semibold">{sale.item_name}</h3>
+                      <p>Quantity reduced: {sale.quantity_reduced}</p>
                       <p>Earned: ${sale.earned}</p>
                       <p className="text-sm text-muted-foreground">
                         {new Date(sale.timestamp).toLocaleString()}

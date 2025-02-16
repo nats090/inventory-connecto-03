@@ -12,14 +12,28 @@ const Layout = () => {
 
   const handleSignOut = async () => {
     try {
+      // First check if we have a valid session
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        // If no session exists, just redirect to login
+        navigate("/login");
+        return;
+      }
+
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
+      
       navigate("/login");
     } catch (error: any) {
+      console.error('Logout error:', error);
+      // Even if logout fails, redirect to login page
+      navigate("/login");
+      
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error.message,
+        title: "Note",
+        description: "You have been logged out.",
       });
     }
   };

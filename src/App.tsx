@@ -6,6 +6,9 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 import Dashboard from "@/pages/Dashboard";
+import ActivityLogsPage from "@/pages/ActivityLogsPage";
+import SalesHistoryPage from "@/pages/SalesHistoryPage";
+import Layout from "@/components/Layout";
 
 function App() {
   return (
@@ -16,13 +19,17 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route
-            path="/dashboard"
+            path="/"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <Layout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="activity-logs" element={<ActivityLogsPage />} />
+            <Route path="sales-history" element={<SalesHistoryPage />} />
+          </Route>
         </Routes>
         <Toaster />
       </AuthProvider>

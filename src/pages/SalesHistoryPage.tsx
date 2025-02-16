@@ -38,15 +38,46 @@ const SalesHistoryPage = () => {
 
   const handleSalesReset = async (category: string) => {
     try {
-      const { error } = await supabase
+      // First, get all sales for this category
+      const { data: categorySales, error: fetchError } = await supabase
+        .from('sales')
+        .select('*')
+        .eq('user_id', user?.id)
+        .eq('category', category);
+
+      if (fetchError) throw fetchError;
+
+      // For each sale, restore the quantity to inventory
+      for (const sale of categorySales || []) {
+        const { error: updateError } = await supabase
+          .from('inventory_items')
+          .update({ 
+            quantity: supabase.sql`quantity + ${sale.quantity_reduced}` 
+          })
+          .eq('user_id', user?.id)
+          .eq('name', sale.item_name)
+          .eq('category', sale.category);
+
+        if (updateError) throw updateError;
+      }
+
+      // Then delete all sales for this category
+      const { error: deleteError } = await supabase
         .from('sales')
         .delete()
         .eq('user_id', user?.id)
         .eq('category', category);
 
-      if (error) throw error;
+      if (deleteError) throw deleteError;
+
+      toast({
+        title: "Success",
+        description: `Reset sales history for ${category} and restored quantities`,
+      });
+
       fetchSales();
     } catch (error: any) {
+      console.error('Error resetting sales:', error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -57,17 +88,43 @@ const SalesHistoryPage = () => {
 
   const handleSaleDelete = async (saleId: string) => {
     try {
-      const { error } = await supabase
+      // First, get the sale record
+      const { data: sale, error: fetchError } = await supabase
+        .from('sales')
+        .select('*')
+        .eq('id', saleId)
+        .eq('user_id', user?.id)
+        .single();
+
+      if (fetchError) throw fetchError;
+      if (!sale) {
+        throw new Error('Sale record not found');
+      }
+
+      // Update the inventory quantity
+      const { error: updateError } = await supabase
+        .from('inventory_items')
+        .update({ 
+          quantity: supabase.sql`quantity + ${sale.quantity_reduced}` 
+        })
+        .eq('user_id', user?.id)
+        .eq('name', sale.item_name)
+        .eq('category', sale.category);
+
+      if (updateError) throw updateError;
+
+      // Delete the sale record
+      const { error: deleteError } = await supabase
         .from('sales')
         .delete()
         .eq('id', saleId)
         .eq('user_id', user?.id);
 
-      if (error) throw error;
+      if (deleteError) throw deleteError;
 
       toast({
         title: "Success",
-        description: "Sale record deleted successfully",
+        description: `Sale record deleted and ${sale.quantity_reduced} items restored to inventory`,
       });
       
       fetchSales();

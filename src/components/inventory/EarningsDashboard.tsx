@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -114,13 +115,14 @@ const EarningsDashboard = ({ sales, onSalesReset }: EarningsDashboardProps) => {
                     </div>
                   ))}
                   {categorySales.length > 0 && (
-                    <div className="pt-4 border-t flex justify-between items-center">
-                      <p className="font-semibold">Total Earnings: ${totalEarnings}</p>
-                      <div className="space-x-2">
+                    <div className="pt-4 border-t">
+                      <p className="font-semibold mb-4">Total Earnings: ${totalEarnings}</p>
+                      <div className="flex items-center gap-2">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleDownloadSales(category, categorySales)}
+                          className="flex-1"
                         >
                           <Download className="h-4 w-4 mr-2" />
                           Download Report
@@ -129,6 +131,7 @@ const EarningsDashboard = ({ sales, onSalesReset }: EarningsDashboardProps) => {
                           variant="destructive"
                           size="sm"
                           onClick={() => handleResetCategory(category)}
+                          className="flex-1"
                         >
                           Reset {category} sales
                         </Button>

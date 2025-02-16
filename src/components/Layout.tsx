@@ -1,7 +1,6 @@
 
 import { Outlet, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { LayoutGrid, FileText, BarChart3 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,15 +12,12 @@ const Layout = () => {
   const handleSignOut = async () => {
     try {
       await signOut();
-      toast({
-        title: "Success",
-        description: "You have been logged out successfully.",
-      });
     } catch (error) {
       console.error('Logout error:', error);
       toast({
-        title: "Note",
-        description: "You have been logged out.",
+        variant: "destructive",
+        title: "Error",
+        description: "There was a problem logging you out.",
       });
     }
   };

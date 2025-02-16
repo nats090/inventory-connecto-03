@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
+import { useToast } from "@/components/ui/use-toast";
 
 type AuthContextType = {
   user: User | null;
@@ -23,25 +24,35 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const signOut = async () => {
     try {
-      // Clear local session state first
+      // First clear local state
       setUser(null);
       setSession(null);
-      
-      // Then attempt to clear Supabase session
-      await supabase.auth.signOut({ scope: 'local' });
+
+      // Then clear Supabase session
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "You have been logged out successfully.",
+      });
     } catch (error) {
       console.error('Error during sign out:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "There was a problem logging you out.",
+      });
     } finally {
-      // Always navigate to login
       navigate('/login');
     }
   };
 
   useEffect(() => {
-    // Check active sessions and sets the user
     const initializeAuth = async () => {
       try {
         const { data: { session: currentSession } } = await supabase.auth.getSession();
@@ -49,10 +60,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (currentSession) {
           setUser(currentSession.user);
           setSession(currentSession);
+          if (window.location.pathname === '/login' || window.location.pathname === '/signup') {
+            navigate('/dashboard');
+          }
         } else {
           setUser(null);
           setSession(null);
-          navigate('/login');
+          if (window.location.pathname !== '/login' && window.location.pathname !== '/signup') {
+            navigate('/login');
+          }
         }
       } catch (error) {
         console.error('Error initializing auth:', error);
@@ -66,17 +82,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     initializeAuth();
 
-    // Listen for changes on auth state (login, sign out, etc.)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
       console.log('Auth state changed:', event);
       
       if (currentSession) {
         setUser(currentSession.user);
         setSession(currentSession);
+        if (window.location.pathname === '/login' || window.location.pathname === '/signup') {
+          navigate('/dashboard');
+        }
       } else {
         setUser(null);
         setSession(null);
-        navigate('/login');
+        if (window.location.pathname !== '/login' && window.location.pathname !== '/signup') {
+          navigate('/login');
+        }
       }
       
       setLoading(false);

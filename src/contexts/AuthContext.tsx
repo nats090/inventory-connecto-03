@@ -31,10 +31,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // First clear local state
       setUser(null);
       setSession(null);
+      localStorage.removeItem('sb-xffinwdhcibvoeebfnlz-auth-token');
 
-      // Then clear Supabase session
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      // Then try to clear Supabase session
+      try {
+        await supabase.auth.signOut();
+      } catch (signOutError) {
+        console.error('Error during Supabase signOut:', signOutError);
+        // Continue even if this fails
+      }
 
       toast({
         title: "Success",
@@ -48,7 +53,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         description: "There was a problem logging you out.",
       });
     } finally {
-      navigate('/login');
+      // Always ensure we redirect to login
+      navigate('/login', { replace: true });
     }
   };
 

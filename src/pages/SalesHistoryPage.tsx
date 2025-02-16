@@ -49,10 +49,23 @@ const SalesHistoryPage = () => {
 
       // For each sale, restore the quantity to inventory
       for (const sale of categorySales || []) {
+        // First get the current inventory item
+        const { data: inventoryItem, error: getError } = await supabase
+          .from('inventory_items')
+          .select('quantity')
+          .eq('user_id', user?.id)
+          .eq('name', sale.item_name)
+          .eq('category', sale.category)
+          .single();
+
+        if (getError) throw getError;
+        if (!inventoryItem) continue;
+
+        // Then update with the new quantity
         const { error: updateError } = await supabase
           .from('inventory_items')
           .update({ 
-            quantity: supabase.sql`quantity + ${sale.quantity_reduced}` 
+            quantity: inventoryItem.quantity + sale.quantity_reduced 
           })
           .eq('user_id', user?.id)
           .eq('name', sale.item_name)
@@ -101,11 +114,25 @@ const SalesHistoryPage = () => {
         throw new Error('Sale record not found');
       }
 
+      // Get the current inventory item
+      const { data: inventoryItem, error: getError } = await supabase
+        .from('inventory_items')
+        .select('quantity')
+        .eq('user_id', user?.id)
+        .eq('name', sale.item_name)
+        .eq('category', sale.category)
+        .single();
+
+      if (getError) throw getError;
+      if (!inventoryItem) {
+        throw new Error('Inventory item not found');
+      }
+
       // Update the inventory quantity
       const { error: updateError } = await supabase
         .from('inventory_items')
         .update({ 
-          quantity: supabase.sql`quantity + ${sale.quantity_reduced}` 
+          quantity: inventoryItem.quantity + sale.quantity_reduced
         })
         .eq('user_id', user?.id)
         .eq('name', sale.item_name)

@@ -8,12 +8,14 @@ type AuthContextType = {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  signOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({ 
   user: null, 
   session: null, 
-  loading: true 
+  loading: true,
+  signOut: async () => {}
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -21,6 +23,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  const signOut = async () => {
+    try {
+      // Clear local session state first
+      setUser(null);
+      setSession(null);
+      
+      // Then attempt to clear Supabase session
+      await supabase.auth.signOut({ scope: 'local' });
+    } catch (error) {
+      console.error('Error during sign out:', error);
+    } finally {
+      // Always navigate to login
+      navigate('/login');
+    }
+  };
 
   useEffect(() => {
     // Check active sessions and sets the user
@@ -68,7 +86,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [navigate]);
 
   return (
-    <AuthContext.Provider value={{ user, session, loading }}>
+    <AuthContext.Provider value={{ user, session, loading, signOut }}>
       {children}
     </AuthContext.Provider>
   );

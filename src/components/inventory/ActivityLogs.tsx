@@ -77,7 +77,7 @@ const ActivityLogs = ({ activities }: ActivityLogsProps) => {
               Download
             </Button>
             <Button
-              variant="outline"
+              variant="destructive"
               size="sm"
               onClick={handleResetLogs}
             >

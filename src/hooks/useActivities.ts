@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Activity } from '@/types/inventory';
 import { supabase } from '@/lib/supabase';
@@ -61,5 +62,5 @@ export const useActivities = (userId: string | undefined) => {
     fetchActivities();
   }, [userId]);
 
-  return { activities, addActivity };
+  return { activities, addActivity, fetchActivities };
 };

@@ -6,6 +6,8 @@ import { formatDate } from "@/lib/utils";
 import { Download, RotateCcw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
+import { useActivities } from "@/hooks/useActivities";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ActivityLogsProps {
   activities: Activity[];
@@ -13,6 +15,8 @@ interface ActivityLogsProps {
 
 const ActivityLogs = ({ activities }: ActivityLogsProps) => {
   const { toast } = useToast();
+  const { user } = useAuth();
+  const { fetchActivities } = useActivities(user?.id);
   
   const handleDownloadLogs = () => {
     const content = `Activity Logs Report\n` +
@@ -45,9 +49,11 @@ const ActivityLogs = ({ activities }: ActivityLogsProps) => {
       const { error } = await supabase
         .from('activity_logs')
         .delete()
-        .eq('user_id', (await supabase.auth.getUser()).data.user?.id);
+        .eq('user_id', user?.id);
 
       if (error) throw error;
+
+      await fetchActivities();
 
       toast({
         title: "Success",

@@ -18,7 +18,12 @@ const Dashboard = () => {
   const { user } = useAuth();
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [sales, setSales] = useState<Sale[]>([]);
-  const [newItem, setNewItem] = useState<Partial<InventoryItem>>({});
+  const [newItem, setNewItem] = useState<Partial<InventoryItem>>({
+    name: "",
+    quantity: 0,
+    price: 0,
+    category: "chicken"
+  });
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
   const { activities, addActivity } = useActivities(user?.id);
 
@@ -91,9 +96,25 @@ const Dashboard = () => {
           description: "Item updated successfully",
         });
       } else {
+        // Ensure all required fields are present
+        if (!newItem.name || !newItem.category || typeof newItem.quantity !== 'number' || typeof newItem.price !== 'number') {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Please fill in all required fields",
+          });
+          return;
+        }
+
         const { error } = await supabase
           .from('inventory_items')
-          .insert([{ ...newItem, user_id: user.id }]);
+          .insert({
+            name: newItem.name,
+            quantity: newItem.quantity,
+            price: newItem.price,
+            category: newItem.category,
+            user_id: user.id
+          });
 
         if (error) throw error;
 
@@ -104,7 +125,12 @@ const Dashboard = () => {
         });
       }
 
-      setNewItem({});
+      setNewItem({
+        name: "",
+        quantity: 0,
+        price: 0,
+        category: "chicken"
+      });
       setEditingItem(null);
       fetchInventory();
     } catch (error: any) {
@@ -266,3 +292,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

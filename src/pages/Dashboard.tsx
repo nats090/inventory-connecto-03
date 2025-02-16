@@ -117,10 +117,6 @@ const Dashboard = () => {
 
   const handleDeleteItem = async (id: string) => {
     try {
-      // First, get the item name before deleting
-      const itemToDelete = items.find(item => item.id === id);
-      if (!itemToDelete) return;
-
       const { error } = await supabase
         .from('inventory_items')
         .delete()
@@ -128,7 +124,7 @@ const Dashboard = () => {
 
       if (error) throw error;
 
-      await addActivity(`Deleted item "${itemToDelete.name}"`);
+      await addActivity(`Deleted an item`);
       toast({
         title: "Success",
         description: "Item deleted successfully",

@@ -1,3 +1,4 @@
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { InventoryItem } from "@/types/inventory";
 import InventoryList from "./InventoryList";
@@ -6,7 +7,7 @@ interface InventoryTabsProps {
   items: InventoryItem[];
   onEditItem: (item: InventoryItem) => void;
   onDeleteItem: (id: string) => void;
-  onReduceQuantity: (item: InventoryItem) => void;
+  onReduceQuantity: (item: InventoryItem, quantity: number) => void;
 }
 
 const CATEGORIES = ["chicken", "pork", "beef", "fish"] as const;

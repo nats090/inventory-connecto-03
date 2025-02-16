@@ -5,33 +5,34 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/components/ui/use-toast";
 import { LayoutGrid, FileText, BarChart3 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Layout = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const handleSignOut = async () => {
-    try {
-      // First check if we have a valid session
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        // If no session exists, just redirect to login
-        navigate("/login");
-        return;
-      }
-
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      
+    if (!user) {
       navigate("/login");
-    } catch (error: any) {
-      console.error('Logout error:', error);
-      // Even if logout fails, redirect to login page
+      return;
+    }
+
+    try {
+      await supabase.auth.signOut({ scope: 'local' });
       navigate("/login");
       
       toast({
-        variant: "destructive",
+        title: "Success",
+        description: "You have been logged out successfully.",
+      });
+    } catch (error: any) {
+      console.error('Logout error:', error);
+      // Force clear the session and redirect
+      await supabase.auth.signOut({ scope: 'local' });
+      navigate("/login");
+      
+      toast({
         title: "Note",
         description: "You have been logged out.",
       });

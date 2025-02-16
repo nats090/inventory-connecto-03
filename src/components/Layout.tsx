@@ -76,7 +76,7 @@ const Layout = () => {
               </div>
             </div>
             <div className="flex items-center">
-              <Button variant="ghost" onClick={handleSignOut}>
+              <Button variant="destructive" onClick={handleSignOut}>
                 Sign Out
               </Button>
             </div>

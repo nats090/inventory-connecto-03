@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -139,7 +138,7 @@ const Dashboard = () => {
     }
   };
 
-  const handleReduceQuantity = async (item: InventoryItem) => {
+  const handleReduceQuantity = async (item: InventoryItem, reduceAmount: number) => {
     try {
       if (item.quantity <= 0) {
         toast({
@@ -150,8 +149,17 @@ const Dashboard = () => {
         return;
       }
 
-      const newQuantity = item.quantity - 1;
-      const earned = item.price;
+      if (reduceAmount > item.quantity) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Cannot reduce more than available quantity",
+        });
+        return;
+      }
+
+      const newQuantity = item.quantity - reduceAmount;
+      const earned = item.price * reduceAmount;
 
       const { error: updateError } = await supabase
         .from('inventory_items')
@@ -165,17 +173,17 @@ const Dashboard = () => {
         .insert([{
           user_id: user?.id,
           item_name: item.name,
-          quantity_reduced: 1,
+          quantity_reduced: reduceAmount,
           earned,
           category: item.category,
         }]);
 
       if (saleError) throw saleError;
 
-      await addActivity(`Sold 1 ${item.name} for $${earned}`);
+      await addActivity(`Sold ${reduceAmount} ${item.name} for $${earned}`);
       toast({
         title: "Success",
-        description: `Sold 1 ${item.name} for $${earned}`,
+        description: `Sold ${reduceAmount} ${item.name} for $${earned}`,
       });
 
       fetchInventory();

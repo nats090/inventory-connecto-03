@@ -1,16 +1,22 @@
+
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { InventoryItem } from "@/types/inventory";
 import { formatDate } from "@/lib/utils";
+import ReduceQuantityDialog from "./ReduceQuantityDialog";
 
 interface InventoryListProps {
   items: InventoryItem[];
   onEditItem: (item: InventoryItem) => void;
   onDeleteItem: (id: string) => void;
-  onReduceQuantity: (item: InventoryItem) => void;
+  onReduceQuantity: (item: InventoryItem, quantity: number) => void;
 }
 
 const InventoryList = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: InventoryListProps) => {
+  const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
+  const [isReduceDialogOpen, setIsReduceDialogOpen] = useState(false);
+
   const handleItemNameClick = (itemName: string) => {
     const searchQuery = encodeURIComponent(itemName);
     window.open(`https://www.google.com/search?q=${searchQuery}`, '_blank');
@@ -59,7 +65,10 @@ const InventoryList = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: In
                 <Button
                   className="bg-blue-700 hover:bg-blue-800"
                   size="sm"
-                  onClick={() => onReduceQuantity(item)}
+                  onClick={() => {
+                    setSelectedItem(item);
+                    setIsReduceDialogOpen(true);
+                  }}
                 >
                   Reduce
                 </Button>
@@ -68,6 +77,20 @@ const InventoryList = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: In
           </CardContent>
         </Card>
       ))}
+
+      {selectedItem && (
+        <ReduceQuantityDialog
+          item={selectedItem}
+          isOpen={isReduceDialogOpen}
+          onClose={() => {
+            setIsReduceDialogOpen(false);
+            setSelectedItem(null);
+          }}
+          onConfirm={(item, quantity) => {
+            onReduceQuantity(item, quantity);
+          }}
+        />
+      )}
     </div>
   );
 };

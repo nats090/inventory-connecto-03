@@ -55,9 +55,38 @@ const SalesHistoryPage = () => {
     }
   };
 
+  const handleSaleDelete = async (saleId: string) => {
+    try {
+      const { error } = await supabase
+        .from('sales')
+        .delete()
+        .eq('id', saleId)
+        .eq('user_id', user?.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Sale record deleted successfully",
+      });
+      
+      fetchSales();
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete sale record",
+      });
+    }
+  };
+
   return (
     <div className="p-8">
-      <EarningsDashboard sales={sales} onSalesReset={handleSalesReset} />
+      <EarningsDashboard 
+        sales={sales} 
+        onSalesReset={handleSalesReset} 
+        onSaleDelete={handleSaleDelete}
+      />
     </div>
   );
 };

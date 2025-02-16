@@ -5,16 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Sale } from "@/types/inventory";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/components/ui/use-toast";
-import { Download } from "lucide-react";
+import { Download, Trash2 } from "lucide-react";
 
 interface EarningsDashboardProps {
   sales: Sale[];
   onSalesReset: (category: string) => void;
+  onSaleDelete: (saleId: string) => void;
 }
 
 const CATEGORIES = ["chicken", "pork", "beef", "fish"] as const;
 
-const EarningsDashboard = ({ sales, onSalesReset }: EarningsDashboardProps) => {
+const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashboardProps) => {
   const { toast } = useToast();
 
   const getSalesByCategory = (category: string) => {
@@ -128,14 +129,26 @@ const EarningsDashboard = ({ sales, onSalesReset }: EarningsDashboardProps) => {
             return (
               <TabsContent key={category} value={category}>
                 <div className="space-y-4">
-                  {categorySales.map((sale, index) => (
-                    <div key={index} className="border-b pb-4 last:border-0">
-                      <h3 className="font-semibold">{sale.item_name}</h3>
-                      <p>Quantity reduced: {sale.quantity_reduced}</p>
-                      <p>Earned: ${sale.earned}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {new Date(sale.timestamp).toLocaleString()}
-                      </p>
+                  {categorySales.map((sale) => (
+                    <div key={sale.id} className="border-b pb-4 last:border-0">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-semibold">{sale.item_name}</h3>
+                          <p>Quantity reduced: {sale.quantity_reduced}</p>
+                          <p>Earned: ${sale.earned}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {new Date(sale.timestamp).toLocaleString()}
+                          </p>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => onSaleDelete(sale.id)}
+                          className="h-8 w-8"
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
                     </div>
                   ))}
                   {categorySales.length > 0 && (

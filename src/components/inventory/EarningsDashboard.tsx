@@ -84,8 +84,32 @@ const EarningsDashboard = ({ sales, onSalesReset }: EarningsDashboardProps) => {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0">
         <CardTitle>Sales History</CardTitle>
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const currentCategory = document.querySelector('[data-state="active"][role="tab"]')?.textContent?.toLowerCase() || 'chicken';
+              const categorySales = getSalesByCategory(currentCategory);
+              handleDownloadSales(currentCategory, categorySales);
+            }}
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Download Report
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => {
+              const currentCategory = document.querySelector('[data-state="active"][role="tab"]')?.textContent?.toLowerCase() || 'chicken';
+              handleResetCategory(currentCategory);
+            }}
+          >
+            Reset Sales
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="chicken" className="w-full">
@@ -115,25 +139,8 @@ const EarningsDashboard = ({ sales, onSalesReset }: EarningsDashboardProps) => {
                     </div>
                   ))}
                   {categorySales.length > 0 && (
-                    <div className="pt-4 border-t flex justify-between items-center">
+                    <div className="pt-4 border-t">
                       <p className="font-semibold">Total Earnings: ${totalEarnings}</p>
-                      <div className="space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDownloadSales(category, categorySales)}
-                        >
-                          <Download className="h-4 w-4 mr-2" />
-                          Download Report
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => handleResetCategory(category)}
-                        >
-                          Reset {category} sales
-                        </Button>
-                      </div>
                     </div>
                   )}
                   {categorySales.length === 0 && (

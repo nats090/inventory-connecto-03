@@ -2,7 +2,7 @@
 import { Outlet, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { LayoutGrid, FileText, BarChart3 } from "lucide-react";
+import { CookingPot, Utensils, FileText, BarChart3, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Layout = () => {
@@ -23,35 +23,36 @@ const Layout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm">
+    <div className="min-h-screen bg-cooking-pattern bg-repeat">
+      <nav className="bg-white/90 backdrop-blur-sm shadow-md border-b border-cooking-softOrange/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center mr-8">
-                <span className="text-xl font-bold text-primary">Food Inventory</span>
+                <CookingPot className="h-6 w-6 text-primary mr-2" />
+                <span className="text-xl font-bold text-primary font-playfair">Food Inventory</span>
               </div>
               <div className="flex space-x-8">
                 <NavLink
                   to="/dashboard"
                   className={({ isActive }) =>
-                    `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                    `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors ${
                       isActive
                         ? "border-primary text-primary"
-                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                        : "border-transparent text-gray-500 hover:text-primary hover:border-cooking-softOrange"
                     }`
                   }
                 >
-                  <LayoutGrid className="w-4 h-4 mr-2" />
+                  <Utensils className="w-4 h-4 mr-2" />
                   Inventory
                 </NavLink>
                 <NavLink
                   to="/activity-logs"
                   className={({ isActive }) =>
-                    `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                    `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors ${
                       isActive
                         ? "border-primary text-primary"
-                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                        : "border-transparent text-gray-500 hover:text-primary hover:border-cooking-softOrange"
                     }`
                   }
                 >
@@ -61,10 +62,10 @@ const Layout = () => {
                 <NavLink
                   to="/sales-history"
                   className={({ isActive }) =>
-                    `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                    `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors ${
                       isActive
                         ? "border-primary text-primary"
-                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                        : "border-transparent text-gray-500 hover:text-primary hover:border-cooking-softOrange"
                     }`
                   }
                 >
@@ -74,14 +75,19 @@ const Layout = () => {
               </div>
             </div>
             <div className="flex items-center">
-              <Button variant="destructive" onClick={handleSignOut}>
+              <Button 
+                variant="outline" 
+                className="text-primary border-primary hover:bg-primary/10" 
+                onClick={handleSignOut}
+              >
+                <LogOut className="w-4 h-4 mr-2" />
                 Sign Out
               </Button>
             </div>
           </div>
         </div>
       </nav>
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 animate-fade-in">
         <Outlet />
       </main>
     </div>

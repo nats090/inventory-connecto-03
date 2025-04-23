@@ -5,7 +5,6 @@ import { Activity } from "@/types/inventory";
 import { formatDate } from "@/lib/utils";
 import { Download, RotateCcw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/lib/supabase";
 import { useActivities } from "@/hooks/useActivities";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -16,7 +15,7 @@ interface ActivityLogsProps {
 const ActivityLogs = ({ activities }: ActivityLogsProps) => {
   const { toast } = useToast();
   const { user } = useAuth();
-  const { fetchActivities } = useActivities(user?.id);
+  const { resetActivities, isLoading } = useActivities(user?.id);
   
   const handleDownloadLogs = () => {
     const content = `Activity Logs Report\n` +
@@ -45,39 +44,20 @@ const ActivityLogs = ({ activities }: ActivityLogsProps) => {
   };
 
   const handleResetLogs = async () => {
-    try {
-      const { error } = await supabase
-        .from('activity_logs')
-        .delete()
-        .eq('user_id', user?.id);
-
-      if (error) throw error;
-
-      await fetchActivities();
-
-      toast({
-        title: "Success",
-        description: "Activity logs have been reset",
-      });
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to reset activity logs",
-      });
-    }
+    await resetActivities();
   };
   
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle>Activity Logs</CardTitle>
+    <Card className="bg-cooking-softPeach border-cooking-softOrange shadow-md">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-cooking-softOrange/30">
+        <CardTitle className="font-playfair text-xl text-amber-800">Activity Logs</CardTitle>
         {activities.length > 0 && (
           <div className="flex space-x-2">
             <Button
               variant="outline"
               size="sm"
               onClick={handleDownloadLogs}
+              className="bg-cooking-softGreen hover:bg-cooking-softGreen/80 text-amber-800 border-amber-500"
             >
               <Download className="h-4 w-4 mr-2" />
               Download
@@ -86,23 +66,28 @@ const ActivityLogs = ({ activities }: ActivityLogsProps) => {
               variant="destructive"
               size="sm"
               onClick={handleResetLogs}
+              disabled={isLoading}
+              className="bg-red-400 hover:bg-red-500 text-white border-none"
             >
-              <RotateCcw className="h-4 w-4 mr-2" />
-              Reset
+              <RotateCcw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
+              {isLoading ? "Resetting..." : "Reset"}
             </Button>
           </div>
         )}
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-4">
         <div className="space-y-2">
           {activities.length === 0 ? (
-            <p className="text-muted-foreground">No activities recorded yet.</p>
+            <p className="text-amber-700 text-center italic">No activities recorded yet.</p>
           ) : (
             activities.map((activity, index) => (
-              <div key={index} className="text-sm">
-                <span className="font-medium">{activity.action}</span>
-                <span className="text-muted-foreground"> - {formatDate(activity.timestamp)}</span>
-                <p className="text-muted-foreground">{activity.details}</p>
+              <div 
+                key={index} 
+                className="text-sm bg-white/70 p-3 rounded-lg shadow-sm border border-cooking-softOrange/20 hover:bg-white transition-colors"
+              >
+                <span className="font-medium text-amber-800">{activity.action}</span>
+                <span className="text-amber-600"> - {formatDate(activity.timestamp)}</span>
+                <p className="text-amber-700 mt-1">{activity.details}</p>
               </div>
             ))
           )}

@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Activity } from '@/types/inventory';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/components/ui/use-toast';
@@ -9,7 +9,7 @@ export const useActivities = (userId: string | undefined) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const fetchActivities = async () => {
+  const fetchActivities = useCallback(async () => {
     if (!userId) return;
 
     setIsLoading(true);
@@ -36,7 +36,7 @@ export const useActivities = (userId: string | undefined) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [userId, toast]);
 
   const addActivity = async (details: string) => {
     if (!userId) return;
@@ -82,7 +82,7 @@ export const useActivities = (userId: string | undefined) => {
           title: "Error",
           description: "Failed to reset activity logs",
         });
-        return;
+        return false;
       }
 
       toast({
@@ -91,6 +91,7 @@ export const useActivities = (userId: string | undefined) => {
       });
       
       setActivities([]);
+      return true;
     } finally {
       setIsLoading(false);
     }
@@ -98,7 +99,7 @@ export const useActivities = (userId: string | undefined) => {
 
   useEffect(() => {
     fetchActivities();
-  }, [userId]);
+  }, [fetchActivities]);
 
   return { 
     activities, 

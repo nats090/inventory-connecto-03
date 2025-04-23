@@ -10,12 +10,14 @@ import { useAuth } from "@/contexts/AuthContext";
 
 interface ActivityLogsProps {
   activities: Activity[];
+  onLogsReset?: () => Promise<void>;
+  isLoading?: boolean;
 }
 
-const ActivityLogs = ({ activities }: ActivityLogsProps) => {
+const ActivityLogs = ({ activities, onLogsReset, isLoading = false }: ActivityLogsProps) => {
   const { toast } = useToast();
   const { user } = useAuth();
-  const { resetActivities, isLoading } = useActivities(user?.id);
+  const { resetActivities } = useActivities(user?.id);
   
   const handleDownloadLogs = () => {
     const content = `Activity Logs Report\n` +
@@ -44,7 +46,21 @@ const ActivityLogs = ({ activities }: ActivityLogsProps) => {
   };
 
   const handleResetLogs = async () => {
-    await resetActivities();
+    try {
+      await resetActivities();
+      
+      // Call the parent component's callback to refresh the data
+      if (onLogsReset) {
+        await onLogsReset();
+      }
+    } catch (error) {
+      console.error("Error resetting logs:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to reset activity logs",
+      });
+    }
   };
   
   return (

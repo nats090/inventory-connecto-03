@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { CookingPot, LogIn, ChevronRight } from "lucide-react";
+import { CookingPot, LogIn, ChevronRight, User, Mail, Lock } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -51,66 +51,92 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cooking-pattern bg-repeat">
-      <div className="w-full max-w-md px-4 py-8 animate-fade-in">
-        <Card className="card-gradient border-cooking-softOrange/20 overflow-hidden">
-          <div className="absolute inset-0 cooking-gradient opacity-20 -z-10"></div>
-          <CardHeader className="space-y-2 text-center pb-2">
-            <div className="mx-auto bg-cooking-softOrange/20 w-16 h-16 rounded-full flex items-center justify-center mb-2">
-              <CookingPot className="h-8 w-8 text-primary" />
+    <div className="min-h-screen flex items-center justify-center bg-cooking-pattern bg-repeat py-10">
+      <div className="w-full max-w-md px-4 animate-fade-in">
+        <Card className="card-gradient border-cooking-softOrange/20 overflow-hidden shadow-lg">
+          <div className="absolute inset-0 cooking-gradient opacity-10 -z-10"></div>
+          <CardHeader className="space-y-3 text-center pb-4">
+            <div className="mx-auto bg-cooking-softOrange/30 w-20 h-20 rounded-full flex items-center justify-center mb-3 shadow-inner">
+              <CookingPot className="h-10 w-10 text-amber-700" />
             </div>
-            <CardTitle className="text-2xl text-center text-primary">
+            <CardTitle className="text-3xl text-center text-amber-800">
               Food Inventory Manager
             </CardTitle>
-            <p className="text-muted-foreground text-sm">Sign in to your account</p>
+            <p className="text-muted-foreground text-amber-600">Sign in to your account</p>
           </CardHeader>
           <CardContent className="pt-6">
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-5">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Email</label>
-                <Input
-                  type="email"
-                  placeholder="chef@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="border-cooking-softOrange/20 focus-visible:ring-primary/20"
-                  required
-                />
+                <label htmlFor="email" className="text-sm block">Email</label>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600">
+                    <Mail className="h-5 w-5" />
+                  </div>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="chef@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="input-enhanced pl-10 border-cooking-softOrange/30 focus-visible:ring-primary/20 bg-white h-12"
+                    required
+                  />
+                </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Password</label>
-                <Input
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="border-cooking-softOrange/20 focus-visible:ring-primary/20"
-                  required
-                />
+                <div className="flex justify-between items-center">
+                  <label htmlFor="password" className="text-sm">Password</label>
+                  <a href="#" className="text-xs text-amber-600 hover:text-amber-800 transition-colors">
+                    Forgot password?
+                  </a>
+                </div>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600">
+                    <Lock className="h-5 w-5" />
+                  </div>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="input-enhanced pl-10 border-cooking-softOrange/30 focus-visible:ring-primary/20 bg-white h-12"
+                    required
+                  />
+                </div>
               </div>
-              <Button 
-                type="submit" 
-                className="w-full bg-primary hover:bg-primary/90"
-                disabled={loading}
-              >
-                {loading ? (
-                  "Logging in..."
-                ) : (
-                  <>
-                    <LogIn className="w-4 h-4 mr-2" />
-                    Login
-                  </>
-                )}
-              </Button>
+              <div className="pt-2">
+                <Button 
+                  type="submit" 
+                  className="w-full btn-primary h-12 text-base"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    "Logging in..."
+                  ) : (
+                    <>
+                      <LogIn className="w-4 h-4 mr-2" />
+                      Sign In
+                    </>
+                  )}
+                </Button>
+              </div>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-cooking-softOrange/20"></div>
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-white px-2 text-amber-600">Or</span>
+                </div>
+              </div>
               <Button
                 type="button"
-                variant="link"
-                className="w-full text-primary"
+                variant="outline"
+                className="w-full btn-outline h-12 text-base"
                 onClick={() => navigate("/signup")}
               >
-                Don't have an account? 
-                <ChevronRight className="w-4 h-4 ml-1" />
-                Sign up
+                <User className="w-4 h-4 mr-2" />
+                Create New Account
               </Button>
             </form>
           </CardContent>

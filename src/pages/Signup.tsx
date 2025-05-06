@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { CookingPot, UserPlus, ChevronLeft } from "lucide-react";
+import { CookingPot, UserPlus, ChevronLeft, Mail, Lock } from "lucide-react";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -45,61 +45,75 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cooking-pattern bg-repeat">
-      <div className="w-full max-w-md px-4 py-8 animate-fade-in">
-        <Card className="card-gradient border-cooking-softOrange/20 overflow-hidden">
-          <div className="absolute inset-0 cooking-gradient opacity-20 -z-10"></div>
-          <CardHeader className="space-y-2 text-center pb-2">
-            <div className="mx-auto bg-cooking-softOrange/20 w-16 h-16 rounded-full flex items-center justify-center mb-2">
-              <CookingPot className="h-8 w-8 text-primary" />
+    <div className="min-h-screen flex items-center justify-center bg-cooking-pattern bg-repeat py-10">
+      <div className="w-full max-w-md px-4 animate-fade-in">
+        <Card className="card-gradient border-cooking-softOrange/20 overflow-hidden shadow-lg">
+          <div className="absolute inset-0 cooking-gradient opacity-10 -z-10"></div>
+          <CardHeader className="space-y-3 text-center pb-4">
+            <div className="mx-auto bg-cooking-softOrange/30 w-20 h-20 rounded-full flex items-center justify-center mb-3 shadow-inner">
+              <CookingPot className="h-10 w-10 text-amber-700" />
             </div>
-            <CardTitle className="text-2xl text-center text-primary">
+            <CardTitle className="text-3xl text-center text-amber-800">
               Create Your Account
             </CardTitle>
-            <p className="text-muted-foreground text-sm">Join our food inventory platform</p>
+            <p className="text-amber-600">Join our food inventory platform</p>
           </CardHeader>
           <CardContent className="pt-6">
-            <form onSubmit={handleSignup} className="space-y-4">
+            <form onSubmit={handleSignup} className="space-y-5">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Email</label>
-                <Input
-                  type="email"
-                  placeholder="chef@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="border-cooking-softOrange/20 focus-visible:ring-primary/20"
-                  required
-                />
+                <label htmlFor="email" className="text-sm block">Email</label>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600">
+                    <Mail className="h-5 w-5" />
+                  </div>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="chef@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="input-enhanced pl-10 border-cooking-softOrange/30 focus-visible:ring-primary/20 bg-white h-12"
+                    required
+                  />
+                </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Password</label>
-                <Input
-                  type="password"
-                  placeholder="Create a strong password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="border-cooking-softOrange/20 focus-visible:ring-primary/20"
-                  required
-                />
+                <label htmlFor="password" className="text-sm block">Password</label>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600">
+                    <Lock className="h-5 w-5" />
+                  </div>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="Create a strong password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="input-enhanced pl-10 border-cooking-softOrange/30 focus-visible:ring-primary/20 bg-white h-12"
+                    required
+                  />
+                </div>
               </div>
-              <Button 
-                type="submit" 
-                className="w-full bg-primary hover:bg-primary/90"
-                disabled={loading}
-              >
-                {loading ? (
-                  "Creating account..."
-                ) : (
-                  <>
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Sign Up
-                  </>
-                )}
-              </Button>
+              <div className="pt-2">
+                <Button 
+                  type="submit" 
+                  className="w-full btn-primary h-12 text-base"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    "Creating account..."
+                  ) : (
+                    <>
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      Sign Up
+                    </>
+                  )}
+                </Button>
+              </div>
               <Button
                 type="button"
                 variant="link"
-                className="w-full text-primary"
+                className="w-full text-amber-700 hover:text-amber-900 font-medium"
                 onClick={() => navigate("/login")}
               >
                 <ChevronLeft className="w-4 h-4 mr-1" />

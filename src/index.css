@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -75,13 +75,21 @@
   }
 
   body {
-    @apply bg-background text-foreground font-playfair;
+    @apply bg-background text-foreground font-nunito;
     background-image: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.95)), 
-                      url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGRUM2QTEiIGZpbGwtb3BhY2l0eT0iLjEiPjxwYXRoIGQ9Ik0zNiAxOGMxLjIgMCAyLjEuOSAyLjEgMi4xIDAgMS4yLS45IDIuMS0yLjEgMi4xLTEuMiAwLTIuMS0uOS0yLjEtMi4xIDAtMS4yLjktMi4xIDIuMS0yLjF6bS0xMiAwYzEuMiAwIDIuMS45IDIuMSAyLjEgMCAxLjItLjkgMi4xLTIuMSAyLjEtMS4yIDAtMi4xLS45LTIuMS0yLjEgMC0xLjIuOS0yLjEgMi4xLTIuMXptLTEyIDBjMS4yIDAgMi4xLjkgMi4xIDIuMSAwIDEuMi0uOSAyLjEtMi4xIDIuMS0xLjIgMC0yLjEtLjktMi4xLTIuMSAwLTEuMi45LTIuMSAyLjEtMi4xem0yNCAxMmMxLjIgMCAyLjEuOSAyLjEgMi4xIDAgMS4yLS45IDIuMS0yLjEgMi4xLTEuMiAwLTIuMS0uOS0yLjEtMi4xIDAtMS4yLjktMi4xIDIuMS0yLjF6bS0xMiAwYzEuMiAwIDIuMS45IDIuMSAyLjEgMCAxLjItLjkgMi4xLTIuMSAyLjEtMS4yIDAtMi4xLS45LTIuMS0yLjEgMC0xLjIuOS0yLjEgMi4xLTIuMXptLTEyIDBjMS4yIDAgMi4xLjkgMi4xIDIuMSAwIDEuMi0uOSAyLjEtMi4xIDIuMS0xLjIgMC0yLjEtLjktMi4xLTIuMSAwLTEuMi45LTIuMSAyLjEtMi4xem0yNCAxMmMxLjIgMCAyLjEuOSAyLjEgMi4xIDAgMS4yLS45IDIuMS0yLjEgMi4xLTEuMiAwLTIuMS0uOS0yLjEtMi4xIDAtMS4yLjktMi4xIDIuMS0yLjF6bS0xMiAwYzEuMiAwIDIuMS45IDIuMSAyLjEgMCAxLjItLjkgMi4xLTIuMSAyLjEtMS4yIDAtMi4xLS45LTIuMS0yLjEgMC0xLjIuOS0yLjEgMi4xLTIuMXptLTEyIDBjMS4yIDAgMi4xLjkgMi4xIDIuMSAwIDEuMi0uOSAyLjEtMi4xIDIuMS0xLjIgMC0yLjEtLjktMi4xLTIuMSAwLTEuMi45LTIuMSAyLjEtMi4xeiIvPjwvZz48L2c+PC9zdmc+');
+                      url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGRUM2QTEiIGZpbGwtb3BhY2l0eT0iLjEiPjxwYXRoIGQ9Ik0zNiAxOGMxLjIgMCAyLjEuOSAyLjEgMi4xIDAgMS4yLS45IDIuMS0yLjEgMi4xLTEuMiAwLTIuMS0uOSAyLjEtMi4xIDAtMS4yLjktMi4xIDIuMS0yLjF6bS0xMiAwYzEuMiAwIDIuMS45IDIuMSAyLjEgMCAxLjItLjkgMi4xLTIuMSAyLjEtMS4yIDAtMi4xLS45LTIuMS0yLjEgMC0xLjIuOS0yLjEgMi4xLTIuMXptLTEyIDBjMS4yIDAgMi4xLjkgMi4xIDIuMSAwIDEuMi0uOSAyLjEtMi4xIDIuMS0xLjIgMC0yLjEtLjktMi4xLTIuMSAwLTEuMi45LTIuMSAyLjEtMi4xem0yNCAxMmMxLjIgMCAyLjEuOSAyLjEgMi4xIDAgMS4yLS45IDIuMS0yLjEgMi4xLTEuMiAwLTIuMS0uOS0yLjEtMi4xIDAtMS4yLjktMi4xIDIuMS0yLjF6bS0xMiAwYzEuMiAwIDIuMS45IDIuMSAyLjEgMCAxLjItLjkgMi4xLTIuMSAyLjEtMS4yIDAtMi4xLS45LTIuMS0yLjEgMC0xLjIuOS0yLjEgMi4xLTIuMXptLTEyIDBjMS4yIDAgMi4xLjkgMi4xIDIuMSAwIDEuMi0uOSAyLjEtMi4xIDIuMS0xLjIgMC0yLjEtLjktMi4xLTIuMSAwLTEuMi45LTIuMSAyLjEtMi4xem0yNCAxMmMxLjIgMCAyLjEuOSAyLjEgMi4xIDAgMS4yLS45IDIuMS0yLjEgMi4xLTEuMiAwLTIuMS0uOS0yLjEtMi4xIDAtMS4yLjktMi4xIDIuMS0yLjF6bS0xMiAwYzEuMiAwIDIuMS45IDIuMSAyLjEgMCAxLjItLjkgMi4xLTIuMSAyLjEtMS4yIDAtMi4xLS45LTIuMS0yLjEgMC0xLjIuOS0yLjEgMi4xLTIuMXptLTEyIDBjMS4yIDAgMi4xLjkgMi4xIDIuMSAwIDEuMi0uOSAyLjEtMi4xIDIuMS0xLjIgMC0yLjEtLjktMi4xLTIuMSAwLTEuMi45LTIuMSAyLjEtMi4xeiIvPjwvZz48L2c+PC9zdmc+');
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-playfair font-bold;
+    @apply font-playfair font-bold text-amber-900;
+  }
+  
+  label {
+    @apply font-medium text-amber-800;
+  }
+  
+  input::placeholder {
+    @apply text-amber-400/60;
   }
 }
 
@@ -100,5 +108,32 @@
 
   .section-padding {
     @apply py-8 px-4 sm:px-6 lg:px-8;
+  }
+  
+  .input-enhanced {
+    @apply shadow-sm border-2 focus:ring-2 focus:ring-primary/20;
+  }
+  
+  .btn-primary {
+    @apply bg-primary hover:bg-primary/90 text-white font-medium shadow-md hover:shadow-lg transition-all duration-200;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-cooking-softOrange/30 hover:border-cooking-softOrange/50 hover:bg-cooking-softOrange/10 text-amber-800 font-medium transition-all duration-200;
+  }
+
+  .animate-fade-in {
+    @apply animate-[fade-in_0.5s_ease-out];
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

@@ -26,50 +26,38 @@ const Layout = () => {
     <div className="min-h-screen bg-cooking-pattern bg-repeat">
       <nav className="bg-white/95 backdrop-blur-sm shadow-md border-b border-cooking-softOrange/20 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
+          <div className="flex justify-between h-20">
             <div className="flex items-center">
-              <div className="flex-shrink-0 flex items-center mr-8">
-                <CookingPot className="h-6 w-6 text-amber-700 mr-2" />
-                <span className="text-xl font-bold text-amber-800 font-playfair">Food Inventory</span>
+              <div className="flex-shrink-0 flex items-center mr-10">
+                <CookingPot className="h-8 w-8 text-amber-700 mr-3" />
+                <span className="text-2xl md:text-3xl font-bold text-amber-800 font-playfair">Food Inventory</span>
               </div>
-              <div className="flex space-x-8">
+              <div className="flex space-x-10">
                 <NavLink
                   to="/dashboard"
                   className={({ isActive }) =>
-                    `inline-flex items-center px-2 pt-1 border-b-2 text-sm font-medium transition-colors ${
-                      isActive
-                        ? "border-amber-600 text-amber-800"
-                        : "border-transparent text-amber-600 hover:text-amber-800 hover:border-amber-400"
-                    }`
+                    `nav-link ${isActive ? "nav-link-active" : "nav-link-inactive"}`
                   }
                 >
-                  <Utensils className="w-4 h-4 mr-2" />
+                  <Utensils className="w-5 h-5 mr-2" />
                   Inventory
                 </NavLink>
                 <NavLink
                   to="/activity-logs"
                   className={({ isActive }) =>
-                    `inline-flex items-center px-2 pt-1 border-b-2 text-sm font-medium transition-colors ${
-                      isActive
-                        ? "border-amber-600 text-amber-800"
-                        : "border-transparent text-amber-600 hover:text-amber-800 hover:border-amber-400"
-                    }`
+                    `nav-link ${isActive ? "nav-link-active" : "nav-link-inactive"}`
                   }
                 >
-                  <FileText className="w-4 h-4 mr-2" />
+                  <FileText className="w-5 h-5 mr-2" />
                   Activity Logs
                 </NavLink>
                 <NavLink
                   to="/sales-history"
                   className={({ isActive }) =>
-                    `inline-flex items-center px-2 pt-1 border-b-2 text-sm font-medium transition-colors ${
-                      isActive
-                        ? "border-amber-600 text-amber-800"
-                        : "border-transparent text-amber-600 hover:text-amber-800 hover:border-amber-400"
-                    }`
+                    `nav-link ${isActive ? "nav-link-active" : "nav-link-inactive"}`
                   }
                 >
-                  <BarChart3 className="w-4 h-4 mr-2" />
+                  <BarChart3 className="w-5 h-5 mr-2" />
                   Sales History
                 </NavLink>
               </div>
@@ -77,17 +65,17 @@ const Layout = () => {
             <div className="flex items-center">
               <Button 
                 variant="outline" 
-                className="btn-outline" 
+                className="btn-outline text-base px-4 py-2 h-auto" 
                 onClick={handleSignOut}
               >
-                <LogOut className="w-4 h-4 mr-2" />
+                <LogOut className="w-5 h-5 mr-2" />
                 Sign Out
               </Button>
             </div>
           </div>
         </div>
       </nav>
-      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 animate-fade-in">
+      <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 animate-fade-in">
         <Outlet />
       </main>
     </div>

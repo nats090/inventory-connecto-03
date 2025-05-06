@@ -75,7 +75,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-nunito;
+    @apply bg-background text-foreground font-nunito text-base md:text-lg;
     background-image: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.95)), 
                       url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGRUM2QTEiIGZpbGwtb3BhY2l0eT0iLjEiPjxwYXRoIGQ9Ik0zNiAxOGMxLjIgMCAyLjEuOSAyLjEgMi4xIDAgMS4yLS45IDIuMS0yLjEgMi4xLTEuMiAwLTIuMS0uOSAyLjEtMi4xIDAtMS4yLjktMi4xIDIuMS0yLjF6bS0xMiAwYzEuMiAwIDIuMS45IDIuMSAyLjEgMCAxLjItLjkgMi4xLTIuMSAyLjEtMS4yIDAtMi4xLS45LTIuMS0yLjEgMC0xLjIuOS0yLjEgMi4xLTIuMXptLTEyIDBjMS4yIDAgMi4xLjkgMi4xIDIuMSAwIDEuMi0uOSAyLjEtMi4xIDIuMS0xLjIgMC0yLjEtLjktMi4xLTIuMSAwLTEuMi45LTIuMSAyLjEtMi4xem0yNCAxMmMxLjIgMCAyLjEuOSAyLjEgMi4xIDAgMS4yLS45IDIuMS0yLjEgMi4xLTEuMiAwLTIuMS0uOS0yLjEtMi4xIDAtMS4yLjktMi4xIDIuMS0yLjF6bS0xMiAwYzEuMiAwIDIuMS45IDIuMSAyLjEgMCAxLjItLjkgMi4xLTIuMSAyLjEtMS4yIDAtMi4xLS45LTIuMS0yLjEgMC0xLjIuOS0yLjEgMi4xLTIuMXptLTEyIDBjMS4yIDAgMi4xLjkgMi4xIDIuMSAwIDEuMi0uOSAyLjEtMi4xIDIuMS0xLjIgMC0yLjEtLjktMi4xLTIuMSAwLTEuMi45LTIuMSAyLjEtMi4xem0yNCAxMmMxLjIgMCAyLjEuOSAyLjEgMi4xIDAgMS4yLS45IDIuMS0yLjEgMi4xLTEuMiAwLTIuMS0uOS0yLjEtMi4xIDAtMS4yLjktMi4xIDIuMS0yLjF6bS0xMiAwYzEuMiAwIDIuMS45IDIuMSAyLjEgMCAxLjItLjkgMi4xLTIuMSAyLjEtMS4yIDAtMi4xLS45LTIuMS0yLjEgMC0xLjIuOS0yLjEgMi4xLTIuMXptLTEyIDBjMS4yIDAgMi4xLjkgMi4xIDIuMSAwIDEuMi0uOSAyLjEtMi4xIDIuMS0xLjIgMC0yLjEtLjktMi4xLTIuMSAwLTEuMi45LTIuMSAyLjEtMi4xeiIvPjwvZz48L2c+PC9zdmc+');
   }
@@ -84,8 +84,20 @@
     @apply font-playfair font-bold text-amber-900;
   }
   
+  h1 {
+    @apply text-3xl md:text-4xl;
+  }
+  
+  h2 {
+    @apply text-2xl md:text-3xl;
+  }
+  
+  h3 {
+    @apply text-xl md:text-2xl;
+  }
+  
   label {
-    @apply font-medium text-amber-800;
+    @apply font-medium text-amber-800 text-base;
   }
   
   input::placeholder {
@@ -111,19 +123,35 @@
   }
   
   .input-enhanced {
-    @apply shadow-sm border-2 focus:ring-2 focus:ring-primary/20;
+    @apply shadow-sm border-2 focus:ring-2 focus:ring-primary/20 text-base md:text-lg;
   }
   
   .btn-primary {
-    @apply bg-primary hover:bg-primary/90 text-white font-medium shadow-md hover:shadow-lg transition-all duration-200;
+    @apply bg-primary hover:bg-primary/90 text-white font-medium shadow-md hover:shadow-lg transition-all duration-200 text-base md:text-lg;
   }
   
   .btn-outline {
-    @apply border-2 border-cooking-softOrange/30 hover:border-cooking-softOrange/50 hover:bg-cooking-softOrange/10 text-amber-800 font-medium transition-all duration-200;
+    @apply border-2 border-cooking-softOrange/30 hover:border-cooking-softOrange/50 hover:bg-cooking-softOrange/10 text-amber-800 font-medium transition-all duration-200 text-base md:text-lg;
   }
 
   .animate-fade-in {
     @apply animate-[fade-in_0.5s_ease-out];
+  }
+  
+  .nav-link {
+    @apply inline-flex items-center px-2 pt-1 border-b-2 text-base md:text-lg font-medium transition-colors;
+  }
+  
+  .nav-link-active {
+    @apply border-amber-600 text-amber-800;
+  }
+  
+  .nav-link-inactive {
+    @apply border-transparent text-amber-600 hover:text-amber-800 hover:border-amber-400;
+  }
+  
+  .dashboard-card {
+    @apply bg-white rounded-xl border border-cooking-softOrange/20 shadow-md p-5 hover:shadow-lg transition-all;
   }
 }
 

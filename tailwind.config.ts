@@ -19,6 +19,17 @@ export default {
       },
     },
     extend: {
+      fontSize: {
+        'base': '1.05rem',
+        'lg': '1.15rem',
+        'xl': '1.25rem',
+        '2xl': '1.5rem',
+        '3xl': '1.875rem',
+        '4xl': '2.25rem',
+      },
+      spacing: {
+        '18': '4.5rem',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -65,6 +76,12 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        xl: "1rem",
+        '2xl': "1.5rem",
+      },
+      boxShadow: {
+        'soft': '0 4px 20px rgba(0, 0, 0, 0.05)',
+        'hover': '0 10px 30px rgba(0, 0, 0, 0.1)',
       },
       keyframes: {
         "accordion-down": {

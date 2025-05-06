@@ -1,4 +1,5 @@
 
+import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { InventoryItem } from "@/types/inventory";
 import InventoryList from "./InventoryList";

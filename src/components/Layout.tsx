@@ -1,4 +1,3 @@
-
 import { Outlet, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -24,97 +23,97 @@ const Layout = () => {
 
   return (
     <div className="min-h-screen bg-cooking-pattern bg-repeat">
-      {/* Enhanced header with improved contrast and spacing */}
+      {/* Updated header with smaller height */}
       <nav className="bg-amber-800 shadow-lg sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-20">
+          <div className="flex justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center mr-8">
-                <CookingPot className="h-10 w-10 text-amber-200 mr-3" />
-                <span className="text-3xl font-bold text-white font-playfair tracking-tight">Food Inventory</span>
+                <CookingPot className="h-8 w-8 text-amber-200 mr-3" />
+                <span className="text-2xl font-bold text-white font-playfair tracking-tight">Food Inventory</span>
               </div>
-              <div className="hidden md:flex space-x-8">
+              <div className="hidden md:flex space-x-6">
                 <NavLink
                   to="/dashboard"
                   className={({ isActive }) =>
-                    `nav-link text-xl py-2 ${isActive ? "text-amber-200 border-amber-200" : "text-amber-100 border-transparent hover:text-white"}`
+                    `nav-link text-lg py-1.5 ${isActive ? "text-amber-200 border-amber-200" : "text-amber-100 border-transparent hover:text-white"}`
                   }
                 >
-                  <Utensils className="w-6 h-6 mr-3" />
+                  <Utensils className="w-5 h-5 mr-2" />
                   Inventory
                 </NavLink>
                 <NavLink
                   to="/activity-logs"
                   className={({ isActive }) =>
-                    `nav-link text-xl py-2 ${isActive ? "text-amber-200 border-amber-200" : "text-amber-100 border-transparent hover:text-white"}`
+                    `nav-link text-lg py-1.5 ${isActive ? "text-amber-200 border-amber-200" : "text-amber-100 border-transparent hover:text-white"}`
                   }
                 >
-                  <FileText className="w-6 h-6 mr-3" />
+                  <FileText className="w-5 h-5 mr-2" />
                   Activity Logs
                 </NavLink>
                 <NavLink
                   to="/sales-history"
                   className={({ isActive }) =>
-                    `nav-link text-xl py-2 ${isActive ? "text-amber-200 border-amber-200" : "text-amber-100 border-transparent hover:text-white"}`
+                    `nav-link text-lg py-1.5 ${isActive ? "text-amber-200 border-amber-200" : "text-amber-100 border-transparent hover:text-white"}`
                   }
                 >
-                  <BarChart3 className="w-6 h-6 mr-3" />
+                  <BarChart3 className="w-5 h-5 mr-2" />
                   Sales History
                 </NavLink>
               </div>
             </div>
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center bg-amber-700 px-4 py-2 rounded-lg">
-                <div className="bg-amber-200 p-2 rounded-full">
-                  <User className="w-5 h-5 text-amber-800" />
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center bg-amber-700 px-3 py-1.5 rounded-lg">
+                <div className="bg-amber-200 p-1.5 rounded-full">
+                  <User className="w-4 h-4 text-amber-800" />
                 </div>
-                <span className="ml-3 text-amber-100 font-medium text-lg">{user?.email?.split('@')[0]}</span>
+                <span className="ml-2 text-amber-100 font-medium text-base">{user?.email?.split('@')[0]}</span>
               </div>
               <Button 
                 variant="outline" 
-                className="text-lg px-5 py-2.5 h-auto border-2 bg-white text-amber-800 hover:bg-amber-100" 
+                className="text-base px-3 py-1.5 h-auto border-2 bg-white text-amber-800 hover:bg-amber-100" 
                 onClick={handleSignOut}
               >
-                <LogOut className="w-5 h-5 mr-2.5" />
+                <LogOut className="w-4 h-4 mr-2" />
                 Sign Out
               </Button>
             </div>
           </div>
         </div>
         
-        {/* Mobile navigation menu */}
+        {/* Mobile navigation menu with adjusted sizes */}
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-4 space-y-1 bg-amber-700">
+          <div className="px-2 pt-2 pb-3 space-y-1 bg-amber-700">
             <NavLink
               to="/dashboard"
               className={({ isActive }) =>
-                `block px-3 py-2 rounded-md text-base font-medium ${isActive ? "bg-amber-900 text-white" : "text-amber-100 hover:bg-amber-600"}`
+                `block px-3 py-1.5 rounded-md text-sm font-medium ${isActive ? "bg-amber-900 text-white" : "text-amber-100 hover:bg-amber-600"}`
               }
             >
               <div className="flex items-center">
-                <Utensils className="w-5 h-5 mr-3" />
+                <Utensils className="w-4 h-4 mr-2" />
                 Inventory
               </div>
             </NavLink>
             <NavLink
               to="/activity-logs"
               className={({ isActive }) =>
-                `block px-3 py-2 rounded-md text-base font-medium ${isActive ? "bg-amber-900 text-white" : "text-amber-100 hover:bg-amber-600"}`
+                `block px-3 py-1.5 rounded-md text-sm font-medium ${isActive ? "bg-amber-900 text-white" : "text-amber-100 hover:bg-amber-600"}`
               }
             >
               <div className="flex items-center">
-                <FileText className="w-5 h-5 mr-3" />
+                <FileText className="w-4 h-4 mr-2" />
                 Activity Logs
               </div>
             </NavLink>
             <NavLink
               to="/sales-history"
               className={({ isActive }) =>
-                `block px-3 py-2 rounded-md text-base font-medium ${isActive ? "bg-amber-900 text-white" : "text-amber-100 hover:bg-amber-600"}`
+                `block px-3 py-1.5 rounded-md text-sm font-medium ${isActive ? "bg-amber-900 text-white" : "text-amber-100 hover:bg-amber-600"}`
               }
             >
               <div className="flex items-center">
-                <BarChart3 className="w-5 h-5 mr-3" />
+                <BarChart3 className="w-4 h-4 mr-2" />
                 Sales History
               </div>
             </NavLink>

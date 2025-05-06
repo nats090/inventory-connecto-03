@@ -3,7 +3,7 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { InventoryItem } from "@/types/inventory";
 import InventoryList from "./InventoryList";
-import { EggFried, Banana, Beef, Fish } from "lucide-react";
+import { EggFried, Beef, Fish, Scissors } from "lucide-react";
 
 interface InventoryTabsProps {
   items: InventoryItem[];
@@ -16,7 +16,7 @@ const CATEGORIES = ["chicken", "pork", "beef", "fish"] as const;
 
 const CategoryIcons = {
   chicken: EggFried,
-  pork: Banana, // Using Banana as a substitute since there's no direct pork icon
+  pork: Scissors, // Using Scissors as a better representation for pork (like meat cutting)
   beef: Beef,
   fish: Fish
 };

@@ -20,15 +20,16 @@ export default {
     },
     extend: {
       fontSize: {
-        'base': '1.05rem',
-        'lg': '1.15rem',
-        'xl': '1.25rem',
-        '2xl': '1.5rem',
-        '3xl': '1.875rem',
-        '4xl': '2.25rem',
+        'base': '1.125rem',    // Increased base font size 
+        'lg': '1.25rem',       // Increased large font size
+        'xl': '1.375rem',      // Increased xl font size
+        '2xl': '1.625rem',     // Increased 2xl font size
+        '3xl': '2rem',         // Increased 3xl font size
+        '4xl': '2.5rem',       // Increased 4xl font size
       },
       spacing: {
         '18': '4.5rem',
+        '22': '5.5rem',
       },
       colors: {
         border: "hsl(var(--border))",
@@ -78,10 +79,12 @@ export default {
         sm: "calc(var(--radius) - 4px)",
         xl: "1rem",
         '2xl': "1.5rem",
+        '3xl': "2rem",
       },
       boxShadow: {
         'soft': '0 4px 20px rgba(0, 0, 0, 0.05)',
         'hover': '0 10px 30px rgba(0, 0, 0, 0.1)',
+        'card': '0 8px 30px rgba(0, 0, 0, 0.08)',
       },
       keyframes: {
         "accordion-down": {
@@ -102,14 +105,26 @@ export default {
             transform: "translateY(0)"
           }
         },
+        "slide-in": {
+          "0%": {
+            opacity: "0",
+            transform: "translateX(-20px)"
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateX(0)"
+          }
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s ease-out",
+        "slide-in": "slide-in 0.4s ease-out",
       },
       backgroundImage: {
         'cooking-pattern': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGRkYiIGZpbGwtb3BhY2l0eT0iLjEiPjxwYXRoIGQ9Ik0zNiAxOGMxLjIgMCAyLjEuOSAyLjEgMi4xIDAgMS4yLS45IDIuMS0yLjEgMi4xLTEuMiAwLTIuMS0uOSAyLjEtMi4xIDAtMS4yLjktMi4xIDIuMS0yLjF6bS0xMiAwYzEuMiAwIDIuMS45IDIuMSAyLjEgMCAxLjItLjkgMi4xLTIuMSAyLjEtMS4yIDAtMi4xLS45LTIuMS0yLjEgMC0xLjIuOS0yLjEgMi4xLTIuMXptLTEyIDBjMS4yIDAgMi4xLjkgMi4xIDIuMSAwIDEuMi0uOSAyLjEtMi4xIDIuMS0xLjIgMC0yLjEtLjktMi4xLTIuMSAwLTEuMi45LTIuMSAyLjEtMi4xem0yNCAxMmMxLjIgMCAyLjEuOSAyLjEgMi4xIDAgMS4yLS45IDIuMS0yLjEgMi4xLTEuMiAwLTIuMS0uOS0yLjEtMi4xIDAtMS4yLjktMi4xIDIuMS0yLjF6bS0xMiAwYzEuMiAwIDIuMS45IDIuMSAyLjEgMCAxLjItLjkgMi4xLTIuMSAyLjEtMS4yIDAtMi4xLS45LTIuMS0yLjEgMC0xLjIuOS0yLjEgMi4xLTIuMXptLTEyIDBjMS4yIDAgMi4xLjkgMi4xIDIuMSAwIDEuMi0uOSAyLjEtMi4xIDIuMS0xLjIgMC0yLjEtLjktMi4xLTIuMSAwLTEuMi45LTIuMSAyLjEtMi4xem0yNCAxMmMxLjIgMCAyLjEuOSAyLjEgMi4xIDAgMS4yLS45IDIuMS0yLjEgMi4xLTEuMiAwLTIuMS0uOS0yLjEtMi4xIDAtMS4yLjktMi4xIDIuMS0yLjF6bS0xMiAwYzEuMiAwIDIuMS45IDIuMSAyLjEgMCAxLjItLjkgMi4xLTIuMSAyLjEtMS4yIDAtMi4xLS45LTIuMS0yLjEgMC0xLjIuOS0yLjEgMi4xLTIuMXptLTEyIDBjMS4yIDAgMi4xLjkgMi4xIDIuMSAwIDEuMi0uOSAyLjEtMi4xIDIuMS0xLjIgMC0yLjEtLjktMi4xLTIuMSAwLTEuMi45LTIuMSAyLjEtMi4xeiIvPjwvZz48L2c+PC9zdmc+')",
+        'gradient-warm': "linear-gradient(to right, #ffecd2 0%, #fcb69f 100%)",
       },
       fontFamily: {
         'playfair': ['"Playfair Display"', 'serif'],

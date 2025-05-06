@@ -74,6 +74,10 @@
     @apply border-border;
   }
 
+  html {
+    @apply scroll-smooth;
+  }
+
   body {
     @apply bg-background text-foreground font-nunito text-base md:text-lg;
     background-image: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.95)), 
@@ -81,23 +85,23 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-playfair font-bold text-amber-900;
+    @apply font-playfair font-bold text-amber-900 tracking-tight;
   }
   
   h1 {
-    @apply text-3xl md:text-4xl;
+    @apply text-3xl md:text-4xl mb-6;
   }
   
   h2 {
-    @apply text-2xl md:text-3xl;
+    @apply text-2xl md:text-3xl mb-5;
   }
   
   h3 {
-    @apply text-xl md:text-2xl;
+    @apply text-xl md:text-2xl mb-4;
   }
   
   label {
-    @apply font-medium text-amber-800 text-base;
+    @apply font-medium text-amber-800 text-lg;
   }
   
   input::placeholder {
@@ -119,19 +123,19 @@
   }
 
   .section-padding {
-    @apply py-8 px-4 sm:px-6 lg:px-8;
+    @apply py-10 px-6 sm:px-8 lg:px-12;
   }
   
   .input-enhanced {
-    @apply shadow-sm border-2 focus:ring-2 focus:ring-primary/20 text-base md:text-lg;
+    @apply shadow-sm border-2 focus:ring-2 focus:ring-primary/20 text-lg;
   }
   
   .btn-primary {
-    @apply bg-primary hover:bg-primary/90 text-white font-medium shadow-md hover:shadow-lg transition-all duration-200 text-base md:text-lg;
+    @apply bg-primary hover:bg-primary/90 text-white font-medium shadow-md hover:shadow-lg transition-all duration-200 text-lg;
   }
   
   .btn-outline {
-    @apply border-2 border-cooking-softOrange/30 hover:border-cooking-softOrange/50 hover:bg-cooking-softOrange/10 text-amber-800 font-medium transition-all duration-200 text-base md:text-lg;
+    @apply border-2 border-cooking-softOrange/30 hover:border-cooking-softOrange/50 hover:bg-cooking-softOrange/10 text-amber-800 font-medium transition-all duration-200 text-lg;
   }
 
   .animate-fade-in {
@@ -139,11 +143,11 @@
   }
   
   .nav-link {
-    @apply inline-flex items-center px-2 pt-1 border-b-2 text-base md:text-lg font-medium transition-colors;
+    @apply inline-flex items-center px-3 pt-1 border-b-2 text-lg md:text-xl font-medium transition-colors;
   }
   
   .nav-link-active {
-    @apply border-amber-600 text-amber-800;
+    @apply border-amber-600 text-amber-800 border-b-[3px];
   }
   
   .nav-link-inactive {
@@ -151,10 +155,15 @@
   }
   
   .dashboard-card {
-    @apply bg-white rounded-xl border border-cooking-softOrange/20 shadow-md p-5 hover:shadow-lg transition-all;
+    @apply bg-white rounded-xl border border-cooking-softOrange/20 shadow-card p-6 hover:shadow-hover transition-all;
+  }
+
+  .content-card {
+    @apply bg-white/90 backdrop-blur-sm rounded-xl shadow-card border border-cooking-softOrange/10 p-6;
   }
 }
 
+/* Enhanced animations */
 @keyframes fade-in {
   0% {
     opacity: 0;
@@ -164,4 +173,34 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FEC6A1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e6b08d;
 }

@@ -6,6 +6,7 @@ import { InventoryItem } from "@/types/inventory";
 import { formatDate } from "@/lib/utils";
 import ReduceQuantityDialog from "./ReduceQuantityDialog";
 import { Edit, Trash2, ExternalLink, Utensils, PhilippinePeso } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface InventoryListProps {
   items: InventoryItem[];
@@ -17,10 +18,16 @@ interface InventoryListProps {
 const InventoryList = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: InventoryListProps) => {
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
   const [isReduceDialogOpen, setIsReduceDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleItemNameClick = (itemName: string) => {
     const searchQuery = encodeURIComponent(itemName);
     window.open(`https://www.google.com/search?q=${searchQuery}`, '_blank');
+  };
+
+  const handleEditClick = (item: InventoryItem) => {
+    // Navigate to add-item page with the item data
+    navigate('/add-item', { state: { editItem: item } });
   };
 
   return (
@@ -30,6 +37,12 @@ const InventoryList = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: In
           <Utensils className="mx-auto h-12 w-12 text-muted-foreground" />
           <h3 className="mt-2 text-sm font-medium text-muted-foreground">No items</h3>
           <p className="mt-1 text-sm text-muted-foreground">Add your first item in this category.</p>
+          <Button 
+            className="mt-4 bg-primary hover:bg-primary/90" 
+            onClick={() => navigate('/add-item')}
+          >
+            Add New Item
+          </Button>
         </div>
       )}
       
@@ -66,7 +79,7 @@ const InventoryList = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: In
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => onEditItem(item)}
+                  onClick={() => handleEditClick(item)}
                   className="h-8 border-cooking-softOrange/30 hover:border-cooking-softOrange/50 hover:bg-cooking-softOrange/10"
                 >
                   <Edit className="h-3.5 w-3.5" />

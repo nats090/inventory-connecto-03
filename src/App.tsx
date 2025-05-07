@@ -8,6 +8,7 @@ import Signup from "@/pages/Signup";
 import Dashboard from "@/pages/Dashboard";
 import ActivityLogsPage from "@/pages/ActivityLogsPage";
 import SalesHistoryPage from "@/pages/SalesHistoryPage";
+import AddItemPage from "@/pages/AddItemPage";
 import Layout from "@/components/Layout";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="activity-logs" element={<ActivityLogsPage />} />
             <Route path="sales-history" element={<SalesHistoryPage />} />
+            <Route path="add-item" element={<AddItemPage />} />
           </Route>
         </Routes>
         <Toaster />

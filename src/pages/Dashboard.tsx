@@ -1,23 +1,19 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { InventoryItem } from "@/types/inventory";
 import InventoryTabs from "@/components/inventory/InventoryTabs";
-import InventoryForm from "@/components/inventory/InventoryForm";
 import { useActivities } from "@/hooks/useActivities";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { toast } = useToast();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [items, setItems] = useState<InventoryItem[]>([]);
-  const [newItem, setNewItem] = useState<Partial<InventoryItem>>({
-    name: "",
-    quantity: 0,
-    price: 0,
-    category: "chicken"
-  });
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
   const { addActivity } = useActivities(user?.id);
 
@@ -46,73 +42,11 @@ const Dashboard = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) return;
-
-    try {
-      if (editingItem) {
-        const { error } = await supabase
-          .from('inventory_items')
-          .update({
-            name: editingItem.name,
-            quantity: editingItem.quantity,
-            price: editingItem.price,
-            category: editingItem.category,
-          })
-          .eq('id', editingItem.id);
-
-        if (error) throw error;
-
-        await addActivity(`Updated item: ${editingItem.name}`);
-        toast({
-          title: "Success",
-          description: "Item updated successfully",
-        });
-      } else {
-        if (!newItem.name || !newItem.category || typeof newItem.quantity !== 'number' || typeof newItem.price !== 'number') {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Please fill in all required fields",
-          });
-          return;
-        }
-
-        const { error } = await supabase
-          .from('inventory_items')
-          .insert({
-            name: newItem.name,
-            quantity: newItem.quantity,
-            price: newItem.price,
-            category: newItem.category,
-            user_id: user.id
-          });
-
-        if (error) throw error;
-
-        await addActivity(`Added new item: ${newItem.name}`);
-        toast({
-          title: "Success",
-          description: "Item added successfully",
-        });
-      }
-
-      setNewItem({
-        name: "",
-        quantity: 0,
-        price: 0,
-        category: "chicken"
-      });
-      setEditingItem(null);
-      fetchInventory();
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
-      });
-    }
+  const handleEditItem = (item: InventoryItem) => {
+    setEditingItem(item);
+    // In the future, we could navigate to a dedicated edit page
+    // For now, we'll just keep the functionality
+    navigate(`/add-item`);
   };
 
   const handleDeleteItem = async (id: string) => {
@@ -199,25 +133,23 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="h-fit sticky top-0">
-          <InventoryForm
-            newItem={newItem}
-            setNewItem={setNewItem}
-            editingItem={editingItem}
-            setEditingItem={setEditingItem}
-            onSubmit={handleSubmit}
-          />
-        </div>
-        <div>
-          <InventoryTabs
-            items={items}
-            onEditItem={setEditingItem}
-            onDeleteItem={handleDeleteItem}
-            onReduceQuantity={handleReduceQuantity}
-          />
-        </div>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold text-amber-800 font-playfair m-0">Inventory</h1>
+        <Button 
+          onClick={() => navigate('/add-item')}
+          className="bg-primary hover:bg-primary/90"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Add New Item
+        </Button>
       </div>
+      
+      <InventoryTabs
+        items={items}
+        onEditItem={handleEditItem}
+        onDeleteItem={handleDeleteItem}
+        onReduceQuantity={handleReduceQuantity}
+      />
     </div>
   );
 };

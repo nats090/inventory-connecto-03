@@ -1,7 +1,8 @@
+
 import { Outlet, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { CookingPot, Utensils, FileText, BarChart3, LogOut, User } from "lucide-react";
+import { CookingPot, Utensils, FileText, BarChart3, LogOut, User, Plus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Layout = () => {
@@ -41,6 +42,15 @@ const Layout = () => {
                 >
                   <Utensils className="w-5 h-5 mr-2" />
                   Inventory
+                </NavLink>
+                <NavLink
+                  to="/add-item"
+                  className={({ isActive }) =>
+                    `nav-link text-lg py-1.5 ${isActive ? "text-amber-200 border-amber-200" : "text-amber-100 border-transparent hover:text-white"}`
+                  }
+                >
+                  <Plus className="w-5 h-5 mr-2" />
+                  Add Item
                 </NavLink>
                 <NavLink
                   to="/activity-logs"
@@ -93,6 +103,17 @@ const Layout = () => {
               <div className="flex items-center">
                 <Utensils className="w-4 h-4 mr-2" />
                 Inventory
+              </div>
+            </NavLink>
+            <NavLink
+              to="/add-item"
+              className={({ isActive }) =>
+                `block px-3 py-1.5 rounded-md text-sm font-medium ${isActive ? "bg-amber-900 text-white" : "text-amber-100 hover:bg-amber-600"}`
+              }
+            >
+              <div className="flex items-center">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Item
               </div>
             </NavLink>
             <NavLink

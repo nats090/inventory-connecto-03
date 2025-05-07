@@ -70,6 +70,7 @@ export const useActivities = (userId: string | undefined) => {
 
     setIsLoading(true);
     try {
+      // Delete all activity logs for this user
       const { error } = await supabase
         .from('activity_logs')
         .delete()
@@ -84,13 +85,15 @@ export const useActivities = (userId: string | undefined) => {
         });
         return false;
       }
-
+      
+      // Immediately set activities to empty array so UI updates right away
+      setActivities([]);
+      
       toast({
         title: "Success",
         description: "Activity logs have been reset",
       });
       
-      setActivities([]);
       return true;
     } catch (error) {
       console.error('Exception when resetting activities:', error);

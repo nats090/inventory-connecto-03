@@ -13,6 +13,8 @@ const ActivityLogsPage = () => {
   const handleLogsReset = async () => {
     const success = await resetActivities();
     if (success) {
+      // After reset, we don't need to refresh since we directly clear the activities array
+      // but we'll increment the refresh key as a backup to ensure state is consistent
       setRefreshKey(prev => prev + 1);
     }
     return success;

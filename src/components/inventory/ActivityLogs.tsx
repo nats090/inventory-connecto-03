@@ -5,19 +5,17 @@ import { Activity } from "@/types/inventory";
 import { formatDate } from "@/lib/utils";
 import { Download, RotateCcw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { useActivities } from "@/hooks/useActivities";
-import { useAuth } from "@/contexts/AuthContext";
+import { useState } from "react";
 
 interface ActivityLogsProps {
   activities: Activity[];
-  onLogsReset?: () => Promise<void>;
-  isLoading?: boolean;
+  onLogsReset: () => Promise<void>;
+  isLoading: boolean;
 }
 
 const ActivityLogs = ({ activities, onLogsReset, isLoading = false }: ActivityLogsProps) => {
   const { toast } = useToast();
-  const { user } = useAuth();
-  const { resetActivities } = useActivities(user?.id);
+  const [isResetting, setIsResetting] = useState(false);
   
   const handleDownloadLogs = () => {
     const content = `Activity Logs Report\n` +
@@ -47,12 +45,15 @@ const ActivityLogs = ({ activities, onLogsReset, isLoading = false }: ActivityLo
 
   const handleResetLogs = async () => {
     try {
-      await resetActivities();
+      setIsResetting(true);
       
-      // Call the parent component's callback to refresh the data
-      if (onLogsReset) {
-        await onLogsReset();
-      }
+      // Call the parent component's callback to reset logs
+      await onLogsReset();
+      
+      toast({
+        title: "Success",
+        description: "Activity logs have been reset",
+      });
     } catch (error) {
       console.error("Error resetting logs:", error);
       toast({
@@ -60,6 +61,8 @@ const ActivityLogs = ({ activities, onLogsReset, isLoading = false }: ActivityLo
         title: "Error",
         description: "Failed to reset activity logs",
       });
+    } finally {
+      setIsResetting(false);
     }
   };
   
@@ -82,11 +85,11 @@ const ActivityLogs = ({ activities, onLogsReset, isLoading = false }: ActivityLo
               variant="destructive"
               size="sm"
               onClick={handleResetLogs}
-              disabled={isLoading}
+              disabled={isResetting || isLoading}
               className="bg-red-400 hover:bg-red-500 text-white border-none"
             >
-              <RotateCcw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
-              {isLoading ? "Resetting..." : "Reset"}
+              <RotateCcw className={`h-4 w-4 mr-2 ${isResetting ? "animate-spin" : ""}`} />
+              {isResetting ? "Resetting..." : "Reset"}
             </Button>
           </div>
         )}

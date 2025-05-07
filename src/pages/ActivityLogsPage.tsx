@@ -6,13 +6,16 @@ import { useEffect, useState } from "react";
 
 const ActivityLogsPage = () => {
   const { user } = useAuth();
-  const { activities, isLoading, fetchActivities } = useActivities(user?.id);
+  const { activities, isLoading, fetchActivities, resetActivities } = useActivities(user?.id);
   const [refreshKey, setRefreshKey] = useState(0);
 
   // Force refresh of activities after reset
   const handleLogsReset = async () => {
-    await fetchActivities();
-    setRefreshKey(prev => prev + 1);
+    const success = await resetActivities();
+    if (success) {
+      setRefreshKey(prev => prev + 1);
+    }
+    return success;
   };
 
   useEffect(() => {

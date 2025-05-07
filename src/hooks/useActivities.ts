@@ -66,7 +66,7 @@ export const useActivities = (userId: string | undefined) => {
   };
 
   const resetActivities = async () => {
-    if (!userId) return;
+    if (!userId) return false;
 
     setIsLoading(true);
     try {
@@ -92,6 +92,14 @@ export const useActivities = (userId: string | undefined) => {
       
       setActivities([]);
       return true;
+    } catch (error) {
+      console.error('Exception when resetting activities:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An unexpected error occurred",
+      });
+      return false;
     } finally {
       setIsLoading(false);
     }

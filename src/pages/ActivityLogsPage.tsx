@@ -3,6 +3,7 @@ import ActivityLogs from "@/components/inventory/ActivityLogs";
 import { useActivities } from "@/hooks/useActivities";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const ActivityLogsPage = () => {
   const { user } = useAuth();
@@ -27,11 +28,13 @@ const ActivityLogsPage = () => {
   return (
     <div className="p-8 bg-cooking-pattern bg-opacity-5">
       <h1 className="text-2xl font-playfair text-amber-900 mb-4">Activity History</h1>
-      <ActivityLogs 
-        activities={activities} 
-        onLogsReset={handleLogsReset}
-        isLoading={isLoading}
-      />
+      <ScrollArea className="h-[calc(100vh-300px)]">
+        <ActivityLogs 
+          activities={activities} 
+          onLogsReset={handleLogsReset}
+          isLoading={isLoading}
+        />
+      </ScrollArea>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { InventoryItem } from "@/types/inventory";
 import InventoryList from "./InventoryList";
 import { EggFried, Beef, Fish, Scissors } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface InventoryTabsProps {
   items: InventoryItem[];

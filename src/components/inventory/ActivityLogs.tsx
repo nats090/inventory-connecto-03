@@ -9,7 +9,7 @@ import { useState } from "react";
 
 interface ActivityLogsProps {
   activities: Activity[];
-  onLogsReset: () => Promise<void>;
+  onLogsReset: () => Promise<boolean | void>;
   isLoading: boolean;
 }
 

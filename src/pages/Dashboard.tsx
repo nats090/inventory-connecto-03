@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -97,13 +96,29 @@ const Dashboard = () => {
       const newQuantity = item.quantity - reduceAmount;
       const earned = item.price * reduceAmount;
 
-      const { error: updateError } = await supabase
-        .from('inventory_items')
-        .update({ quantity: newQuantity })
-        .eq('id', item.id);
+      // If quantity becomes 0, delete the item instead of updating it
+      if (newQuantity === 0) {
+        const { error: deleteError } = await supabase
+          .from('inventory_items')
+          .delete()
+          .eq('id', item.id);
 
-      if (updateError) throw updateError;
+        if (deleteError) throw deleteError;
 
+        await addActivity(`Sold all ${item.name} (${reduceAmount} items) for ₱${earned}`);
+      } else {
+        // Otherwise update the quantity as before
+        const { error: updateError } = await supabase
+          .from('inventory_items')
+          .update({ quantity: newQuantity })
+          .eq('id', item.id);
+
+        if (updateError) throw updateError;
+
+        await addActivity(`Sold ${reduceAmount} ${item.name} for ₱${earned}`);
+      }
+
+      // Record the sale regardless of whether the item was deleted or updated
       const { error: saleError } = await supabase
         .from('sales')
         .insert([{
@@ -116,10 +131,9 @@ const Dashboard = () => {
 
       if (saleError) throw saleError;
 
-      await addActivity(`Sold ${reduceAmount} ${item.name} for ₱${earned}`);
       toast({
         title: "Success",
-        description: `Sold ${reduceAmount} ${item.name} for ₱${earned}`,
+        description: `Sold ${reduceAmount} ${item.name} for ₱${earned}${newQuantity === 0 ? ". Item removed from inventory." : ""}`,
       });
 
       fetchInventory();

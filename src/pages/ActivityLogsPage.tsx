@@ -28,13 +28,15 @@ const ActivityLogsPage = () => {
   return (
     <div className="p-8 bg-cooking-pattern bg-opacity-5">
       <h1 className="text-2xl font-playfair text-amber-900 mb-4">Activity History</h1>
-      <ScrollArea className="h-[calc(100vh-300px)]">
-        <ActivityLogs 
-          activities={activities} 
-          onLogsReset={handleLogsReset}
-          isLoading={isLoading}
-        />
-      </ScrollArea>
+      <div className="h-[500px]">
+        <ScrollArea className="h-full">
+          <ActivityLogs 
+            activities={activities} 
+            onLogsReset={handleLogsReset}
+            isLoading={isLoading}
+          />
+        </ScrollArea>
+      </div>
     </div>
   );
 };

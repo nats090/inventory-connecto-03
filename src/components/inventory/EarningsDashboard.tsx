@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sale } from "@/types/inventory";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/components/ui/use-toast";
-import { Download, Trash2 } from "lucide-react";
+import { Download, Trash2, PhilippinePeso } from "lucide-react";
 
 interface EarningsDashboardProps {
   sales: Sale[];
@@ -33,11 +33,11 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
       categorySales.map(sale => 
         `Item: ${sale.item_name}\n` +
         `Quantity: ${sale.quantity_reduced}\n` +
-        `Earned: $${sale.earned}\n` +
+        `Earned: ₱${sale.earned}\n` +
         `Date: ${new Date(sale.timestamp).toLocaleString()}\n` +
         `----------------------------------------`
       ).join('\n\n') +
-      `\n\nTotal Earnings: $${totalEarnings}`;
+      `\n\nTotal Earnings: ₱${totalEarnings}`;
 
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -135,7 +135,9 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
                         <div>
                           <h3 className="font-semibold">{sale.item_name}</h3>
                           <p>Quantity reduced: {sale.quantity_reduced}</p>
-                          <p>Earned: ${sale.earned}</p>
+                          <p className="flex items-center">
+                            Earned: <PhilippinePeso className="h-3 w-3 mx-1" />{sale.earned}
+                          </p>
                           <p className="text-sm text-muted-foreground">
                             {new Date(sale.timestamp).toLocaleString()}
                           </p>
@@ -153,7 +155,9 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
                   ))}
                   {categorySales.length > 0 && (
                     <div className="pt-4 border-t">
-                      <p className="font-semibold">Total Earnings: ${totalEarnings}</p>
+                      <p className="font-semibold flex items-center">
+                        Total Earnings: <PhilippinePeso className="h-3 w-3 mx-1" />{totalEarnings}
+                      </p>
                     </div>
                   )}
                   {categorySales.length === 0 && (

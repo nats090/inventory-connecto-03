@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -180,10 +181,10 @@ const Dashboard = () => {
 
       if (saleError) throw saleError;
 
-      await addActivity(`Sold ${reduceAmount} ${item.name} for $${earned}`);
+      await addActivity(`Sold ${reduceAmount} ${item.name} for ₱${earned}`);
       toast({
         title: "Success",
-        description: `Sold ${reduceAmount} ${item.name} for $${earned}`,
+        description: `Sold ${reduceAmount} ${item.name} for ₱${earned}`,
       });
 
       fetchInventory();

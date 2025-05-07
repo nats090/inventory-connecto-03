@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { InventoryItem } from "@/types/inventory";
 import { formatDate } from "@/lib/utils";
 import ReduceQuantityDialog from "./ReduceQuantityDialog";
-import { Edit, Trash2, ExternalLink, Utensils } from "lucide-react";
+import { Edit, Trash2, ExternalLink, Utensils, PhilippinePeso } from "lucide-react";
 
 interface InventoryListProps {
   items: InventoryItem[];
@@ -52,7 +52,9 @@ const InventoryList = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: In
                   </div>
                   <div className="flex items-center">
                     <span className="text-muted-foreground">Price:</span>
-                    <span className="ml-1 font-medium">${item.price}</span>
+                    <span className="ml-1 font-medium flex items-center">
+                      <PhilippinePeso className="h-3 w-3 mr-1" />{item.price}
+                    </span>
                   </div>
                 </div>
                 <div className="mt-1 text-xs text-muted-foreground">

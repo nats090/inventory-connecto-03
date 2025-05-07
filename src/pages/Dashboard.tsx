@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -14,7 +15,7 @@ const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [items, setItems] = useState<InventoryItem[]>([]);
-  const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const { addActivity } = useActivities(user?.id);
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const Dashboard = () => {
   }, [user]);
 
   const fetchInventory = async () => {
+    setIsLoading(true);
     try {
       const { data, error } = await supabase
         .from('inventory_items')
@@ -39,14 +41,13 @@ const Dashboard = () => {
         title: "Error",
         description: "Failed to fetch inventory items",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleEditItem = (item: InventoryItem) => {
-    setEditingItem(item);
-    // In the future, we could navigate to a dedicated edit page
-    // For now, we'll just keep the functionality
-    navigate(`/add-item`);
+    navigate(`/add-item`, { state: { editItem: item } });
   };
 
   const handleDeleteItem = async (id: string) => {
@@ -144,12 +145,22 @@ const Dashboard = () => {
         </Button>
       </div>
       
-      <InventoryTabs
-        items={items}
-        onEditItem={handleEditItem}
-        onDeleteItem={handleDeleteItem}
-        onReduceQuantity={handleReduceQuantity}
-      />
+      {isLoading ? (
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-pulse flex flex-col items-center">
+            <div className="h-12 w-12 bg-cooking-softOrange/20 rounded-full mb-4"></div>
+            <div className="h-4 w-32 bg-cooking-softOrange/20 rounded mb-2"></div>
+            <div className="h-3 w-48 bg-cooking-softOrange/10 rounded"></div>
+          </div>
+        </div>
+      ) : (
+        <InventoryTabs
+          items={items}
+          onEditItem={handleEditItem}
+          onDeleteItem={handleDeleteItem}
+          onReduceQuantity={handleReduceQuantity}
+        />
+      )}
     </div>
   );
 };

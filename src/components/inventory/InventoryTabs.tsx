@@ -50,26 +50,22 @@ const InventoryTabs = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: In
         })}
       </TabsList>
 
-      <div className="h-[500px] overflow-hidden"> {/* Fixed height container */}
+      <div className="overflow-hidden"> 
         {CATEGORIES.map((category) => (
-          <TabsContent key={category} value={category} className="mt-0 animate-fade-in h-full">
-            <div className="content-card h-full">
-              <h3 className="mb-4 capitalize flex items-center sticky top-0 bg-white z-10 py-2">
+          <TabsContent key={category} value={category} className="mt-0 animate-fade-in">
+            <div className="content-card">
+              <h3 className="mb-6 capitalize flex items-center bg-white py-2">
                 <div className={`p-1.5 rounded-full ${CategoryColors[category]} flex items-center justify-center mr-2`}>
                   {React.createElement(CategoryIcons[category], { className: "w-5 h-5" })}
                 </div>
                 {category} Inventory
               </h3>
-              <div className="h-[calc(100%-3rem)] overflow-hidden">
-                <ScrollArea className="h-full pr-4">
-                  <InventoryList
-                    items={items.filter((item) => item.category === category)}
-                    onEditItem={onEditItem}
-                    onDeleteItem={onDeleteItem}
-                    onReduceQuantity={onReduceQuantity}
-                  />
-                </ScrollArea>
-              </div>
+              <InventoryList
+                items={items.filter((item) => item.category === category)}
+                onEditItem={onEditItem}
+                onDeleteItem={onDeleteItem}
+                onReduceQuantity={onReduceQuantity}
+              />
             </div>
           </TabsContent>
         ))}

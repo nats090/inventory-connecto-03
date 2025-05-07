@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sale } from "@/types/inventory";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/components/ui/use-toast";
-import { Download, Trash2, PhilippinePeso } from "lucide-react";
+import { Download, Trash2, PhilippinePeso, Calendar } from "lucide-react";
 
 interface EarningsDashboardProps {
   sales: Sale[];
@@ -24,6 +24,10 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
 
   const calculateTotalEarnings = (categorySales: Sale[]) => {
     return categorySales.reduce((total, sale) => total + sale.earned, 0);
+  };
+
+  const calculateTotalSales = () => {
+    return sales.reduce((total, sale) => total + sale.earned, 0);
   };
 
   const handleDownloadSales = (category: string, categorySales: Sale[]) => {
@@ -86,7 +90,13 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
-        <CardTitle>Sales History</CardTitle>
+        <CardTitle className="flex items-center">
+          <Calendar className="mr-2 h-5 w-5" /> 
+          <span>Sales Summary</span>
+          <div className="ml-4 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+            Total: ₱{calculateTotalSales().toFixed(2)}
+          </div>
+        </CardTitle>
         <div className="space-x-2">
           <Button
             variant="outline"
@@ -129,6 +139,15 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
             return (
               <TabsContent key={category} value={category}>
                 <div className="space-y-4">
+                  {categorySales.length > 0 && (
+                    <div className="bg-muted/30 rounded-lg p-4 mb-4">
+                      <p className="font-semibold flex items-center text-lg">
+                        Total {category} earnings: <PhilippinePeso className="h-4 w-4 mx-1" />
+                        {totalEarnings.toFixed(2)}
+                      </p>
+                    </div>
+                  )}
+                  
                   {categorySales.map((sale) => (
                     <div key={sale.id} className="border-b pb-4 last:border-0">
                       <div className="flex justify-between items-start">
@@ -153,15 +172,9 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
                       </div>
                     </div>
                   ))}
-                  {categorySales.length > 0 && (
-                    <div className="pt-4 border-t">
-                      <p className="font-semibold flex items-center">
-                        Total Earnings: <PhilippinePeso className="h-3 w-3 mx-1" />{totalEarnings}
-                      </p>
-                    </div>
-                  )}
+                  
                   {categorySales.length === 0 && (
-                    <p className="text-muted-foreground">No sales recorded for {category}</p>
+                    <p className="text-muted-foreground text-center py-8">No sales recorded for {category}</p>
                   )}
                 </div>
               </TabsContent>

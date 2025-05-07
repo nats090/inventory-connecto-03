@@ -1,13 +1,18 @@
-
 import EarningsDashboard from "@/components/inventory/EarningsDashboard";
 import { useState, useEffect } from "react";
 import { Sale } from "@/types/inventory";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { startOfToday, startOfWeek, startOfMonth, subMonths } from "date-fns";
+
+type DateFilter = "today" | "week" | "month" | "all";
 
 const SalesHistoryPage = () => {
   const [sales, setSales] = useState<Sale[]>([]);
+  const [allSales, setAllSales] = useState<Sale[]>([]);
+  const [dateFilter, setDateFilter] = useState<DateFilter>("all");
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -16,6 +21,10 @@ const SalesHistoryPage = () => {
       fetchSales();
     }
   }, [user]);
+
+  useEffect(() => {
+    filterSalesByDate(dateFilter);
+  }, [dateFilter, allSales]);
 
   const fetchSales = async () => {
     try {
@@ -26,6 +35,7 @@ const SalesHistoryPage = () => {
         .order('timestamp', { ascending: false });
 
       if (error) throw error;
+      setAllSales(data || []);
       setSales(data || []);
     } catch (error: any) {
       toast({
@@ -34,6 +44,37 @@ const SalesHistoryPage = () => {
         description: "Failed to fetch sales history",
       });
     }
+  };
+
+  const filterSalesByDate = (filter: DateFilter) => {
+    if (filter === "all") {
+      setSales(allSales);
+      return;
+    }
+
+    let startDate: Date;
+    const now = new Date();
+
+    switch (filter) {
+      case "today":
+        startDate = startOfToday();
+        break;
+      case "week":
+        startDate = startOfWeek(now);
+        break;
+      case "month":
+        startDate = startOfMonth(now);
+        break;
+      default:
+        setSales(allSales);
+        return;
+    }
+
+    const filteredSales = allSales.filter(sale => 
+      new Date(sale.timestamp) >= startDate
+    );
+    
+    setSales(filteredSales);
   };
 
   const handleSalesReset = async (category: string) => {
@@ -166,6 +207,25 @@ const SalesHistoryPage = () => {
 
   return (
     <div className="p-8">
+      <div className="mb-6 flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Sales History</h1>
+        <div className="w-[200px]">
+          <Select 
+            value={dateFilter} 
+            onValueChange={(value) => setDateFilter(value as DateFilter)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Filter by date" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Sales</SelectItem>
+              <SelectItem value="today">Today's Sales</SelectItem>
+              <SelectItem value="week">This Week's Sales</SelectItem>
+              <SelectItem value="month">This Month's Sales</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
       <EarningsDashboard 
         sales={sales} 
         onSalesReset={handleSalesReset} 

@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { InventoryItem } from "@/types/inventory";
@@ -33,7 +34,17 @@ const Dashboard = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setItems(data || []);
+
+      // Enhance items with image URLs from localStorage
+      const itemsWithImages = (data || []).map(item => {
+        const imageUrl = localStorage.getItem(`item_image_${item.id}`);
+        return {
+          ...item,
+          image_url: imageUrl || undefined
+        };
+      });
+      
+      setItems(itemsWithImages);
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -57,6 +68,9 @@ const Dashboard = () => {
         .eq('id', id);
 
       if (error) throw error;
+
+      // Also remove the image URL from localStorage
+      localStorage.removeItem(`item_image_${id}`);
 
       await addActivity(`Deleted an item`);
       toast({
@@ -104,6 +118,9 @@ const Dashboard = () => {
           .eq('id', item.id);
 
         if (deleteError) throw deleteError;
+        
+        // Remove image URL from localStorage
+        localStorage.removeItem(`item_image_${item.id}`);
 
         await addActivity(`Sold all ${item.name} (${reduceAmount} items) for ₱${earned}`);
       } else {

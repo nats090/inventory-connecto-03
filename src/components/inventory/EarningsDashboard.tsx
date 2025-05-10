@@ -97,10 +97,11 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
             Total: ₱{calculateTotalSales().toFixed(2)}
           </div>
         </CardTitle>
-        <div className="space-x-2">
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
+            className="h-9"
             onClick={() => {
               const currentCategory = document.querySelector('[data-state="active"][role="tab"]')?.textContent?.toLowerCase() || 'chicken';
               const categorySales = getSalesByCategory(currentCategory);
@@ -113,6 +114,7 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
           <Button
             variant="destructive"
             size="sm"
+            className="h-9"
             onClick={() => {
               const currentCategory = document.querySelector('[data-state="active"][role="tab"]')?.textContent?.toLowerCase() || 'chicken';
               handleResetCategory(currentCategory);

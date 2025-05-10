@@ -67,9 +67,6 @@ const Dashboard = () => {
 
       if (error) throw error;
 
-      // Also remove the image URL from localStorage
-      localStorage.removeItem(`item_image_${id}`);
-
       await addActivity(`Deleted an item`);
       toast({
         title: "Success",

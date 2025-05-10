@@ -32,6 +32,7 @@ export const migrateImageUrlsFromLocalStorage = async (userId: string) => {
         } else {
           // Remove the item from localStorage after successful migration
           localStorage.removeItem(`item_image_${item.id}`);
+          console.log(`Successfully migrated image URL for item ${item.id}`);
         }
       }
     }

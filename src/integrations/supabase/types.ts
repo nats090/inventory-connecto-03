@@ -38,6 +38,7 @@ export type Database = {
           category: string
           created_at: string
           id: string
+          image_url: string | null
           name: string
           price: number
           quantity: number
@@ -47,6 +48,7 @@ export type Database = {
           category: string
           created_at?: string
           id?: string
+          image_url?: string | null
           name: string
           price: number
           quantity: number
@@ -56,6 +58,7 @@ export type Database = {
           category?: string
           created_at?: string
           id?: string
+          image_url?: string | null
           name?: string
           price?: number
           quantity?: number
@@ -98,7 +101,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      add_image_url_column: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      test_image_url_column: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

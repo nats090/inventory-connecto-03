@@ -50,7 +50,6 @@ const ActivityLogs = ({ activities, onLogsReset, isLoading = false }: ActivityLo
       // Call the parent component's callback to reset logs
       await onLogsReset();
       
-      // Toast is now handled in useActivities for consistency
     } catch (error) {
       console.error("Error resetting logs:", error);
       toast({

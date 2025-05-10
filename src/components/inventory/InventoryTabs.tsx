@@ -32,19 +32,19 @@ const CategoryColors = {
 const InventoryTabs = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: InventoryTabsProps) => {
   return (
     <Tabs defaultValue="chicken" className="w-full">
-      <TabsList className="grid grid-cols-4 w-full mb-8 bg-cooking-softYellow/40 p-1.5 rounded-xl">
+      <TabsList className="grid grid-cols-4 w-full mb-4 sm:mb-8 bg-cooking-softYellow/40 p-1 sm:p-1.5 rounded-lg sm:rounded-xl">
         {CATEGORIES.map((category) => {
           const Icon = CategoryIcons[category];
           return (
             <TabsTrigger 
               key={category} 
               value={category} 
-              className="capitalize data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md flex items-center gap-2 py-3 text-lg"
+              className="capitalize data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md flex flex-col sm:flex-row items-center gap-1 sm:gap-2 py-2 sm:py-3 text-xs sm:text-base"
             >
-              <div className={`p-1.5 rounded-full ${CategoryColors[category]} flex items-center justify-center`}>
-                <Icon className="w-5 h-5" />
+              <div className={`p-1 sm:p-1.5 rounded-full ${CategoryColors[category]} flex items-center justify-center`}>
+                <Icon className="w-3 h-3 sm:w-5 sm:h-5" />
               </div>
-              {category}
+              <span className="hidden xs:inline">{category}</span>
             </TabsTrigger>
           );
         })}
@@ -53,10 +53,10 @@ const InventoryTabs = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: In
       <div className="overflow-hidden"> 
         {CATEGORIES.map((category) => (
           <TabsContent key={category} value={category} className="mt-0 animate-fade-in">
-            <div className="content-card">
-              <h3 className="mb-6 capitalize flex items-center bg-white py-2">
-                <div className={`p-1.5 rounded-full ${CategoryColors[category]} flex items-center justify-center mr-2`}>
-                  {React.createElement(CategoryIcons[category], { className: "w-5 h-5" })}
+            <div className="content-card p-3 sm:p-6">
+              <h3 className="mb-4 sm:mb-6 capitalize flex items-center bg-white py-2">
+                <div className={`p-1 sm:p-1.5 rounded-full ${CategoryColors[category]} flex items-center justify-center mr-2`}>
+                  {React.createElement(CategoryIcons[category], { className: "w-4 h-4 sm:w-5 sm:h-5" })}
                 </div>
                 {category} Inventory
               </h3>

@@ -64,17 +64,17 @@ const ActivityLogs = ({ activities, onLogsReset, isLoading = false }: ActivityLo
   
   return (
     <Card className="bg-cooking-softPeach border-cooking-softOrange shadow-md">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-cooking-softOrange/30">
-        <CardTitle className="font-playfair text-xl text-amber-800">Activity Logs</CardTitle>
+      <CardHeader className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0 pb-2 border-b border-cooking-softOrange/30">
+        <CardTitle className="font-playfair text-lg sm:text-xl text-amber-800">Activity Logs</CardTitle>
         {activities.length > 0 && (
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 w-full sm:w-auto">
             <Button
               variant="outline"
               size="sm"
               onClick={handleDownloadLogs}
-              className="bg-cooking-softGreen hover:bg-cooking-softGreen/80 text-amber-800 border-amber-500"
+              className="bg-cooking-softGreen hover:bg-cooking-softGreen/80 text-amber-800 border-amber-500 text-xs sm:text-sm flex-1 sm:flex-auto h-8 sm:h-9"
             >
-              <Download className="h-4 w-4 mr-2" />
+              <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               Download
             </Button>
             <Button
@@ -82,15 +82,15 @@ const ActivityLogs = ({ activities, onLogsReset, isLoading = false }: ActivityLo
               size="sm"
               onClick={handleResetLogs}
               disabled={isResetting || isLoading}
-              className="bg-red-400 hover:bg-red-500 text-white border-none"
+              className="bg-red-400 hover:bg-red-500 text-white border-none text-xs sm:text-sm flex-1 sm:flex-auto h-8 sm:h-9"
             >
-              <RotateCcw className={`h-4 w-4 mr-2 ${isResetting ? "animate-spin" : ""}`} />
+              <RotateCcw className={`h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-2 ${isResetting ? "animate-spin" : ""}`} />
               {isResetting ? "Resetting..." : "Reset"}
             </Button>
           </div>
         )}
       </CardHeader>
-      <CardContent className="mt-4">
+      <CardContent className="mt-3 sm:mt-4">
         <div className="space-y-2">
           {activities.length === 0 ? (
             <p className="text-amber-700 text-center italic">No activities recorded yet.</p>
@@ -98,11 +98,11 @@ const ActivityLogs = ({ activities, onLogsReset, isLoading = false }: ActivityLo
             activities.map((activity, index) => (
               <div 
                 key={index} 
-                className="text-sm bg-white/70 p-3 rounded-lg shadow-sm border border-cooking-softOrange/20 hover:bg-white transition-colors"
+                className="text-xs sm:text-sm bg-white/70 p-2.5 sm:p-3 rounded-lg shadow-sm border border-cooking-softOrange/20 hover:bg-white transition-colors"
               >
                 <span className="font-medium text-amber-800">{activity.action}</span>
-                <span className="text-amber-600"> - {formatDate(activity.timestamp)}</span>
-                <p className="text-amber-700 mt-1">{activity.details}</p>
+                <span className="text-amber-600 text-xs"> - {formatDate(activity.timestamp)}</span>
+                <p className="text-amber-700 mt-0.5 sm:mt-1 text-xs sm:text-sm">{activity.details}</p>
               </div>
             ))
           )}

@@ -65,15 +65,15 @@ const ActivityLogsPage = () => {
   };
 
   return (
-    <div className="p-8 bg-cooking-pattern bg-opacity-5">
-      <div className="mb-6 flex justify-between items-center">
-        <h1 className="text-2xl font-playfair text-amber-900">Activity History</h1>
-        <div className="w-[200px]">
+    <div className="p-2 sm:p-4 md:p-8 bg-cooking-pattern bg-opacity-5">
+      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0">
+        <h1 className="text-xl sm:text-2xl font-playfair text-amber-900">Activity History</h1>
+        <div className="w-full sm:w-[200px]">
           <Select 
             value={dateFilter} 
             onValueChange={(value) => setDateFilter(value as DateFilter)}
           >
-            <SelectTrigger className="border-amber-300 bg-cooking-softPeach/70">
+            <SelectTrigger className="border-amber-300 bg-cooking-softPeach/70 text-sm">
               <SelectValue placeholder="Filter by date" />
             </SelectTrigger>
             <SelectContent>
@@ -85,7 +85,7 @@ const ActivityLogsPage = () => {
           </Select>
         </div>
       </div>
-      <div className="h-[500px]">
+      <div className="h-[60vh] sm:h-[500px]">
         <ScrollArea className="h-full">
           <ActivityLogs 
             activities={filteredActivities} 

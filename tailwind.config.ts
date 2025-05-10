@@ -19,13 +19,23 @@ export default {
       },
     },
     extend: {
+      screens: {
+        'xs': '475px',
+      },
       fontSize: {
-        'base': '1.125rem',    // Increased base font size 
-        'lg': '1.25rem',       // Increased large font size
-        'xl': '1.375rem',      // Increased xl font size
-        '2xl': '1.625rem',     // Increased 2xl font size
-        '3xl': '2rem',         // Increased 3xl font size
-        '4xl': '2.5rem',       // Increased 4xl font size
+        'base': ['1rem', '1.5rem'],      // Adjusted for mobile  
+        'lg': ['1.125rem', '1.75rem'],   // Adjusted for mobile
+        'xl': ['1.25rem', '1.75rem'],    // Adjusted for mobile
+        '2xl': ['1.5rem', '2rem'],       // Adjusted for mobile
+        '3xl': ['1.875rem', '2.25rem'],  // Adjusted for mobile
+        '4xl': ['2.25rem', '2.5rem'],    // Adjusted for mobile
+        // Larger on desktop via responsive utilities
+        'sm:base': '1.125rem',
+        'sm:lg': '1.25rem',  
+        'sm:xl': '1.375rem',
+        'sm:2xl': '1.625rem',
+        'sm:3xl': '2rem',
+        'sm:4xl': '2.5rem',
       },
       spacing: {
         '18': '4.5rem',

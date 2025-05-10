@@ -89,46 +89,47 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0">
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between space-y-3 sm:space-y-0 pb-4">
         <CardTitle className="flex items-center">
           <Calendar className="mr-2 h-5 w-5" /> 
           <span>Sales Summary</span>
-          <div className="ml-4 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+          <div className="ml-2 sm:ml-4 px-2 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm font-medium">
             Total: ₱{calculateTotalSales().toFixed(2)}
           </div>
         </CardTitle>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <Button
             variant="outline"
             size="sm"
-            className="h-9"
+            className="h-9 flex-1 sm:flex-none text-xs sm:text-sm"
             onClick={() => {
               const currentCategory = document.querySelector('[data-state="active"][role="tab"]')?.textContent?.toLowerCase() || 'chicken';
               const categorySales = getSalesByCategory(currentCategory);
               handleDownloadSales(currentCategory, categorySales);
             }}
           >
-            <Download className="h-4 w-4 mr-2" />
-            Download Report
+            <Download className="h-4 w-4 mr-1 sm:mr-2" />
+            <span>Download</span>
           </Button>
           <Button
             variant="destructive"
             size="sm"
-            className="h-9"
+            className="h-9 flex-1 sm:flex-none text-xs sm:text-sm"
             onClick={() => {
               const currentCategory = document.querySelector('[data-state="active"][role="tab"]')?.textContent?.toLowerCase() || 'chicken';
               handleResetCategory(currentCategory);
             }}
           >
-            Reset Sales
+            <Trash2 className="h-4 w-4 mr-1 sm:mr-2" />
+            <span>Reset</span>
           </Button>
         </div>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="chicken" className="w-full">
-          <TabsList className="grid grid-cols-4 w-full">
+          <TabsList className="grid grid-cols-4 w-full mb-4 sm:mb-6">
             {CATEGORIES.map((category) => (
-              <TabsTrigger key={category} value={category} className="capitalize">
+              <TabsTrigger key={category} value={category} className="capitalize text-xs sm:text-sm">
                 {category}
               </TabsTrigger>
             ))}
@@ -142,9 +143,9 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
               <TabsContent key={category} value={category}>
                 <div className="space-y-4">
                   {categorySales.length > 0 && (
-                    <div className="bg-muted/30 rounded-lg p-4 mb-4">
-                      <p className="font-semibold flex items-center text-lg">
-                        Total {category} earnings: <PhilippinePeso className="h-4 w-4 mx-1" />
+                    <div className="bg-muted/30 rounded-lg p-3 sm:p-4 mb-4">
+                      <p className="font-semibold flex items-center text-base sm:text-lg">
+                        Total {category} earnings: <PhilippinePeso className="h-3 w-3 sm:h-4 sm:w-4 mx-1" />
                         {totalEarnings.toFixed(2)}
                       </p>
                     </div>
@@ -153,13 +154,13 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
                   {categorySales.map((sale) => (
                     <div key={sale.id} className="border-b pb-4 last:border-0">
                       <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-semibold">{sale.item_name}</h3>
-                          <p>Quantity reduced: {sale.quantity_reduced}</p>
-                          <p className="flex items-center">
+                        <div className="pr-2">
+                          <h3 className="font-semibold text-base sm:text-lg">{sale.item_name}</h3>
+                          <p className="text-sm">Quantity reduced: {sale.quantity_reduced}</p>
+                          <p className="flex items-center text-sm">
                             Earned: <PhilippinePeso className="h-3 w-3 mx-1" />{sale.earned}
                           </p>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-xs sm:text-sm text-muted-foreground">
                             {new Date(sale.timestamp).toLocaleString()}
                           </p>
                         </div>
@@ -167,7 +168,7 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
                           variant="ghost"
                           size="icon"
                           onClick={() => onSaleDelete(sale.id)}
-                          className="h-8 w-8"
+                          className="h-8 w-8 mt-1"
                         >
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
@@ -176,7 +177,7 @@ const EarningsDashboard = ({ sales, onSalesReset, onSaleDelete }: EarningsDashbo
                   ))}
                   
                   {categorySales.length === 0 && (
-                    <p className="text-muted-foreground text-center py-8">No sales recorded for {category}</p>
+                    <p className="text-muted-foreground text-center py-8 text-sm sm:text-base">No sales recorded for {category}</p>
                   )}
                 </div>
               </TabsContent>

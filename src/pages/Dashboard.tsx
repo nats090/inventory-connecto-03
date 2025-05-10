@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/components/ui/use-toast";
@@ -9,6 +8,7 @@ import { useActivities } from "@/hooks/useActivities";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { migrateImageUrlsFromLocalStorage } from "@/utils/migrateImageUrls";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -17,12 +17,19 @@ const Dashboard = () => {
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { addActivity } = useActivities(user?.id);
+  const [migrationRun, setMigrationRun] = useState(false);
 
   useEffect(() => {
     if (user) {
       fetchInventory();
+      
+      // Run migration once per session
+      if (!migrationRun) {
+        migrateImageUrlsFromLocalStorage(user.id);
+        setMigrationRun(true);
+      }
     }
-  }, [user]);
+  }, [user, migrationRun]);
 
   const fetchInventory = async () => {
     setIsLoading(true);
@@ -34,17 +41,8 @@ const Dashboard = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-
-      // Enhance items with image URLs from localStorage
-      const itemsWithImages = (data || []).map(item => {
-        const imageUrl = localStorage.getItem(`item_image_${item.id}`);
-        return {
-          ...item,
-          image_url: imageUrl || undefined
-        };
-      });
       
-      setItems(itemsWithImages);
+      setItems(data || []);
     } catch (error: any) {
       toast({
         variant: "destructive",

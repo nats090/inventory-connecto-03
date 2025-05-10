@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase"; // Use the writable supabase client
 import { useToast } from "@/components/ui/use-toast";
@@ -68,8 +67,6 @@ const AddItemPage = () => {
         return;
       }
 
-      // Since the database doesn't have an image_url column yet, we'll store it in a separate table
-      // First, let's handle the inventory item
       if (isEditing && editingItemId) {
         // Update existing item
         const { error } = await supabase
@@ -78,17 +75,12 @@ const AddItemPage = () => {
             name: item.name,
             quantity: item.quantity,
             price: item.price,
-            category: item.category
+            category: item.category,
+            image_url: item.image_url || null
           })
           .eq('id', editingItemId);
 
         if (error) throw error;
-        
-        // Now, let's store the image URL in browser's localStorage as a temporary solution
-        // In production, you'd want to alter the database schema or use another storage solution
-        if (item.image_url) {
-          localStorage.setItem(`item_image_${editingItemId}`, item.image_url);
-        }
         
         await addActivity(`Updated item: ${item.name}`);
         toast({
@@ -104,16 +96,12 @@ const AddItemPage = () => {
             quantity: item.quantity,
             price: item.price,
             category: item.category,
-            user_id: user.id
+            user_id: user.id,
+            image_url: item.image_url || null
           })
           .select();
 
         if (error) throw error;
-        
-        // Store image URL in localStorage if provided
-        if (item.image_url && data && data[0] && data[0].id) {
-          localStorage.setItem(`item_image_${data[0].id}`, item.image_url);
-        }
 
         await addActivity(`Added new item: ${item.name}`);
         toast({

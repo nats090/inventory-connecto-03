@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Save } from "lucide-react";
+import { Plus, Save, ImageUp } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useActivities } from "@/hooks/useActivities";
 
@@ -33,7 +33,8 @@ const AddItemPage = () => {
     name: "",
     quantity: 0,
     price: 0,
-    category: "chicken"
+    category: "chicken",
+    image_url: ""
   });
 
   // Check if we're editing an existing item (passed through state)
@@ -44,7 +45,8 @@ const AddItemPage = () => {
         name: editItem.name,
         quantity: editItem.quantity,
         price: editItem.price,
-        category: editItem.category
+        category: editItem.category,
+        image_url: editItem.image_url || ""
       });
       setIsEditing(true);
       setEditingItemId(editItem.id);
@@ -75,6 +77,7 @@ const AddItemPage = () => {
             quantity: item.quantity,
             price: item.price,
             category: item.category,
+            image_url: item.image_url
           })
           .eq('id', editingItemId);
 
@@ -94,6 +97,7 @@ const AddItemPage = () => {
             quantity: item.quantity,
             price: item.price,
             category: item.category,
+            image_url: item.image_url,
             user_id: user.id
           });
 
@@ -111,7 +115,8 @@ const AddItemPage = () => {
         name: "",
         quantity: 0,
         price: 0,
-        category: "chicken"
+        category: "chicken",
+        image_url: ""
       });
       setIsEditing(false);
       setEditingItemId(null);
@@ -197,6 +202,36 @@ const AddItemPage = () => {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="image-url" className="text-sm font-medium flex items-center gap-1">
+                <ImageUp className="w-4 h-4" />
+                Image URL <span className="text-muted-foreground text-xs">(optional)</span>
+              </label>
+              <Input
+                id="image-url"
+                type="url"
+                placeholder="https://example.com/image.jpg"
+                value={item.image_url || ""}
+                onChange={(e) => setItem((prev) => ({ ...prev, image_url: e.target.value }))}
+                className="border-cooking-softOrange/20 focus-visible:ring-primary/20"
+              />
+              {item.image_url && (
+                <div className="mt-2 p-2 border rounded border-cooking-softOrange/20">
+                  <p className="text-xs text-muted-foreground mb-1">Preview:</p>
+                  <div className="relative h-36 bg-gray-100 rounded overflow-hidden">
+                    <img 
+                      src={item.image_url} 
+                      alt={item.name || "Item preview"} 
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "https://placehold.co/400x300?text=Image+Error";
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
             
             <div className="flex gap-2 pt-4">

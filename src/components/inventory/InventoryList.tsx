@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { InventoryItem } from "@/types/inventory";
 import ReduceQuantityDialog from "./ReduceQuantityDialog";
-import { Edit, Trash2, Utensils, PhilippinePeso } from "lucide-react";
+import { Edit, Trash2, Utensils, PhilippinePeso, ImageOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface InventoryListProps {
@@ -27,6 +27,10 @@ const InventoryList = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: In
     navigate('/add-item', { state: { editItem: item } });
   };
 
+  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
+    event.currentTarget.src = "https://placehold.co/100x100?text=No+Image";
+  };
+
   return (
     <div>
       {items.length === 0 && (
@@ -48,43 +52,59 @@ const InventoryList = ({ items, onEditItem, onDeleteItem, onReduceQuantity }: In
           <Button
             key={item.id}
             variant="outline"
-            className="h-auto py-4 px-4 flex flex-col items-start text-left border-cooking-softOrange/20 hover:border-cooking-softOrange/50 hover:bg-cooking-softOrange/10 transition-all"
+            className="h-auto p-0 flex flex-col items-start text-left border-cooking-softOrange/20 hover:border-cooking-softOrange/50 hover:bg-cooking-softOrange/10 transition-all overflow-hidden"
             onClick={() => handleReduceClick(item)}
           >
-            <div className="w-full flex justify-between items-start">
-              <h3 className="font-semibold text-lg text-primary">{item.name}</h3>
-              <div className="flex gap-1">
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleEditClick(item);
-                  }} 
-                  className="p-1 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100"
-                >
-                  <Edit className="h-3.5 w-3.5" />
-                </button>
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onDeleteItem(item.id);
-                  }} 
-                  className="p-1 rounded-full bg-red-50 text-red-600 hover:bg-red-100"
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </button>
+            {item.image_url ? (
+              <div className="w-full h-32 bg-gray-100 relative overflow-hidden">
+                <img 
+                  src={item.image_url} 
+                  alt={item.name} 
+                  className="w-full h-full object-cover"
+                  onError={handleImageError}
+                />
               </div>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-x-4 mt-2 text-sm w-full">
-              <div className="flex items-center">
-                <span className="text-muted-foreground">Quantity:</span>
-                <span className="ml-1 font-medium">{item.quantity}</span>
+            ) : (
+              <div className="w-full h-16 bg-gray-100 flex items-center justify-center">
+                <ImageOff className="h-5 w-5 text-gray-400" />
               </div>
-              <div className="flex items-center">
-                <span className="text-muted-foreground">Price:</span>
-                <span className="ml-1 font-medium flex items-center">
-                  <PhilippinePeso className="h-3 w-3 mr-1" />{item.price}
-                </span>
+            )}
+            <div className="w-full p-4">
+              <div className="w-full flex justify-between items-start">
+                <h3 className="font-semibold text-lg text-primary">{item.name}</h3>
+                <div className="flex gap-1">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditClick(item);
+                    }} 
+                    className="p-1 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100"
+                  >
+                    <Edit className="h-3.5 w-3.5" />
+                  </button>
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDeleteItem(item.id);
+                    }} 
+                    className="p-1 rounded-full bg-red-50 text-red-600 hover:bg-red-100"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-x-4 mt-2 text-sm w-full">
+                <div className="flex items-center">
+                  <span className="text-muted-foreground">Quantity:</span>
+                  <span className="ml-1 font-medium">{item.quantity}</span>
+                </div>
+                <div className="flex items-center">
+                  <span className="text-muted-foreground">Price:</span>
+                  <span className="ml-1 font-medium flex items-center">
+                    <PhilippinePeso className="h-3 w-3 mr-1" />{item.price}
+                  </span>
+                </div>
               </div>
             </div>
           </Button>
